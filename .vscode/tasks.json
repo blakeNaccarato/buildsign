@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "task: pre-commit",
+      "type": "shell",
+      "command": "just pre-commit",
+      "icon": { "id": "git-commit" },
+      "problemMatcher": []
+    },
+    {
+      "label": "task: Run ruff",
+      "type": "shell",
+      "command": ". ./dev.ps1 && iuv ruff check . && iuv ruff format .",
+      "icon": { "id": "check" },
+      "problemMatcher": []
+    },
+    {
+      "label": "task: Run pyright",
+      "type": "shell",
+      "command": "./Invoke-Uv.ps1 pyright",
+      "icon": { "id": "check" },
+      "problemMatcher": []
+    }
+  ]
+}

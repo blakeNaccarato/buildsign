@@ -28,7 +28,7 @@ dev = [
 ]
 
 [tool.coverage.report]
-exclude_also = ['if __name__ == "__main__":',]
+exclude_also = ['if __name__ == "__main__":']
 [tool.coverage.run]
 branch = true
 

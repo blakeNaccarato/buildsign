@@ -22,6 +22,11 @@
       "label": "ruff",
       "command": "${config:just} ruff",
       "icon": { "id": "check" }
+    },
+    {
+      "label": "sync",
+      "command": "${config:just} sync",
+      "icon": { "id": "file-symlink-directory" }
     }
   ]
 }

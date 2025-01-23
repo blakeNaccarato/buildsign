@@ -1,8 +1,9 @@
 set shell := ['pwsh', '-Command']
 set dotenv-load
-dev := './Sync-Environment; uv run '
+sync := './Sync-Environment'
+dev := sync + '; uv run '
 sync:
-  {{dev}}
+  {{sync}}
 pre-commit:
   {{dev}} pre-commit run --verbose
 pyright:

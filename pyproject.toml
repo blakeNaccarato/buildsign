@@ -1,3 +1,7 @@
+[build-system]
+requires = ["flit_core==3.9.0"]
+build-backend = "flit_core.buildapi"
+
 [project]
 name = "script"
 description = "Script"
@@ -7,6 +11,8 @@ license = { file = "LICENSE" }
 version = "0.0.0"
 requires-python = "==3.11.*"
 # ///
+[project.scripts]
+"script" = "script:main"
 
 [dependency-groups]
 dev = [

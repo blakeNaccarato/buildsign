@@ -17,6 +17,11 @@
       "icon": { "id": "git-commit" }
     },
     {
+      "label": "pre-commit (all files)",
+      "command": "uv run just pre-commit --all-files",
+      "icon": { "id": "git-commit" }
+    },
+    {
       "label": "pyright",
       "command": "uv run just pyright",
       "icon": { "id": "check" }

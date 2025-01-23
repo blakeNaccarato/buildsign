@@ -17,10 +17,10 @@ if ($IsWindows) {
     [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 }
 
-$PyProject = (Get-Content -Encoding 'UTF8' -Raw 'pyproject.toml').TrimEnd("`n")
-$ScriptBlock = Get-Content -Encoding 'UTF8' -Raw "$Script.py" |
+$PyProject = (Get-Content -Raw 'pyproject.toml').TrimEnd("`n").TrimEnd("`r`n")
+$ScriptBlock = Get-Content -Raw "$Script.py" |
     Select-String -Pattern $Pattern
-Set-Content -Encoding 'UTF8' 'pyproject.toml' (
+Set-Content 'pyproject.toml' (
     $PyProject -Replace $Pattern, (
         (
             $ScriptBlock.Matches.Value -Split "`n" |
@@ -30,5 +30,6 @@ Set-Content -Encoding 'UTF8' 'pyproject.toml' (
         ) -Join "`n"
     )
 )
-uv sync
 git add 'pyproject.toml'
+uv sync
+if ($IsWindows) { .venv/scripts/activate.ps1 } else { .venv/bin/activate.ps1 }

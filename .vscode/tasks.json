@@ -1,26 +1,27 @@
 {
   "version": "2.0.0",
+  "type": "shell",
+  "problemMatcher": ["$python"],
   "tasks": [
     {
-      "label": "task: pre-commit",
-      "type": "shell",
-      "command": "just pre-commit",
-      "icon": { "id": "git-commit" },
-      "problemMatcher": []
+      "label": "pre-commit",
+      "command": "${config:just} pre-commit",
+      "icon": { "id": "git-commit" }
     },
     {
-      "label": "task: Run ruff",
-      "type": "shell",
-      "command": ". ./dev.ps1 && iuv ruff check . && iuv ruff format .",
-      "icon": { "id": "check" },
-      "problemMatcher": []
+      "label": "pyright",
+      "command": "${config:just} pyright",
+      "icon": { "id": "check" }
     },
     {
-      "label": "task: Run pyright",
-      "type": "shell",
-      "command": "./Invoke-Uv.ps1 pyright",
-      "icon": { "id": "check" },
-      "problemMatcher": []
+      "label": "pytest",
+      "command": "${config:just} pytest",
+      "icon": { "id": "beaker" }
+    },
+    {
+      "label": "ruff",
+      "command": "${config:just} ruff",
+      "icon": { "id": "check" }
     }
   ]
 }

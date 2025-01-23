@@ -30,11 +30,11 @@ code = ["script.py"]
 
 [tool.pytest.ini_options]
 addopts = """
+    -p no:legacypaths
+    -r a
     --strict-config
     --strict-markers
     --color=yes
-    -p no:legacypaths
-    -r a
 """
 testpaths = "tests.py"
 xfail_strict = true

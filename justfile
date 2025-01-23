@@ -1,7 +1,13 @@
 set shell := ['pwsh', '-Command']
 set dotenv-load
-dev := './Sync-Environment; '
+dev := './Sync-Environment; uv run '
 sync:
   {{dev}}
-pre-commit: sync
-  pre-commit run --verbose
+pre-commit:
+  {{dev}} pre-commit run --verbose
+pyright:
+  {{dev}} pyright
+pytest:
+  {{dev}} pytest
+ruff:
+  {{dev}} ruff check .

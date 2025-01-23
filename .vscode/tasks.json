@@ -4,29 +4,32 @@
   "problemMatcher": ["$python"],
   "tasks": [
     {
+      "label": "sync",
+      "command": "uv run just sync",
+      "icon": { "id": "sync" },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
       "label": "pre-commit",
-      "command": "${config:just} pre-commit",
+      "command": "uv run just pre-commit",
       "icon": { "id": "git-commit" }
     },
     {
       "label": "pyright",
-      "command": "${config:just} pyright",
+      "command": "uv run just pyright",
       "icon": { "id": "check" }
     },
     {
       "label": "pytest",
-      "command": "${config:just} pytest",
+      "command": "uv run just pytest",
       "icon": { "id": "beaker" }
     },
     {
       "label": "ruff",
-      "command": "${config:just} ruff",
+      "command": "uv run just ruff",
       "icon": { "id": "check" }
-    },
-    {
-      "label": "sync",
-      "command": "${config:just} sync",
-      "icon": { "id": "file-symlink-directory" }
     }
   ]
 }

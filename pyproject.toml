@@ -42,6 +42,7 @@ addopts = """
     --strict-markers
     --color=yes
 """
+cache_dir = ".cache/.pytest_cache"
 testpaths = "tests.py"
 xfail_strict = true
 
@@ -143,6 +144,7 @@ reportUnnecessaryTypeIgnoreComment = "none"
 reportUnusedCallResult = "none"
 
 [tool.ruff]
+cache-dir = ".cache/.ruff_cache"
 output-format = "grouped"
 fix = true
 show-fixes = true

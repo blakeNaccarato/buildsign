@@ -6,6 +6,10 @@
 # dependencies = ["cappa==0.26.4"]
 # ///
 
+from shlex import split
+from subprocess import run
+from sys import argv
+
 from cappa.base import command, invoke
 
 
@@ -24,6 +28,10 @@ class Hello:
 
 def main():  # noqa: D103
     invoke(Hello)
+
+
+def imain():  # noqa: D103
+    run(check=True, args=[*split("uvx --from . hello"), *argv[1:]])
 
 
 if __name__ == "__main__":

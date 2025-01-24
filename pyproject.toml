@@ -10,6 +10,9 @@ license = { file = "LICENSE" }
 # /// script
 version = "0.0.0"
 requires-python = "==3.11.*"
+dependencies = [
+    "cappa==0.26.4",
+]
 # ///
 [project.scripts]
 "script" = "script:main"

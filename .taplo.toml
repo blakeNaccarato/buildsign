@@ -1,0 +1,2 @@
+formatting.column_width = 88
+exclude = ["data/headers/*.toml", "**/expectations.toml"]

@@ -3,9 +3,7 @@
 # /// script
 # version = "0.0.0"
 # requires-python = "==3.12.*"
-# dependencies = [
-#     "cappa==0.26.4",
-# ]
+# dependencies = ["cappa==0.26.4"]
 # ///
 
 from cappa.base import command, invoke

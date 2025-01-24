@@ -8,7 +8,14 @@
 # ]
 # ///
 
-from cappa.base import command, invoke
+from __future__ import annotations
+
+from cappa.base import command, parse
+
+
+def hello(args: Hello):
+    """Say hello."""
+    print(f"\n\tHello, {args.name}!\n")  # noqa: T201
 
 
 @command
@@ -18,12 +25,9 @@ class Hello:
     name: str = "you"
     """Subject of the greeting."""
 
-    def __call__(self):  # noqa: D102
-        print(f"\n\tHello, {self.name}!\n")  # noqa: T201
-
 
 def main():  # noqa: D103
-    invoke(Hello)  # pyright: ignore[reportArgumentType]
+    hello(parse(Hello))
 
 
 if __name__ == "__main__":

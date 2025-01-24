@@ -14,11 +14,13 @@ repos:
         entry: "pwsh Sync-Environment.ps1"
       - id: "fawltydeps"
         name: "fawltydeps"
+        always_run: true
         pass_filenames: false
         language: "system"
         entry: "uv run fawltydeps"
       - id: "pytest"
         name: "pytest"
+        always_run: true
         pass_filenames: false
         language: "system"
         entry: "uv run pytest"

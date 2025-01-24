@@ -1,6 +1,7 @@
 <#.SYNOPSIS
-Synchronize Python development environment based on a script's PEP 723 inline metadata.#>
-Param([string]$Script = 'script')
+Sync Python environment based on a script's PEP 723 inline metadata.#>
+Param( [string]$Title )
+
 $Pattern = '(?s)# /// script.*?# ///'
 $Token = '^# ///'
 
@@ -18,7 +19,7 @@ if ($IsWindows) {
 }
 
 $PyProject = (Get-Content -Raw 'pyproject.toml').TrimEnd("`n").TrimEnd("`r`n")
-$ScriptBlock = Get-Content -Raw "$Script.py" |
+$ScriptBlock = Get-Content -Raw "$Title.py" |
     Select-String -Pattern $Pattern
 Set-Content 'pyproject.toml' (
     $PyProject -Replace $Pattern, (

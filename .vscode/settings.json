@@ -16,7 +16,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "*.root": ".coverage, .env, .gitignore, .pre-commit-config.yaml, justfile, LICENSE, pyproject.toml, Sync-Environment.ps1, uv.lock"
+    "*.root": "*.exe, *.ico, *.lock, *.md, *.ps1, *.sed, *.yaml, .coverage, .env, .gitignore, justfile, LICENSE, pyproject.toml, Sync-Environment.ps1"
   },
   //! File associations
   "files.associations": { ".root": "plaintext" },

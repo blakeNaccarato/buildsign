@@ -4,6 +4,20 @@
   "problemMatcher": ["$python"],
   "tasks": [
     {
+      "label": "build",
+      "command": "uv run just build",
+      "icon": { "id": "file-binary" },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "execute",
+      "command": "uv run just execute",
+      "icon": { "id": "file-binary" }
+    },
+    {
       "label": "sync",
       "command": "uv run just sync",
       "icon": { "id": "sync" },

@@ -3,19 +3,19 @@ requires = ["flit_core==3.9.0"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "script"
-description = "Script"
+name = "hello"
+description = "Say hello"
 readme = "README.md"
 license = { file = "LICENSE" }
 # /// script
 version = "0.0.0"
-requires-python = "==3.11.*"
+requires-python = "==3.12.*"
 dependencies = [
     "cappa==0.26.4",
 ]
 # ///
 [project.scripts]
-"script" = "script:main"
+"hello" = "hello:main"
 
 [dependency-groups]
 dev = [
@@ -37,7 +37,7 @@ branch = true
 
 [tool.fawltydeps]
 deps = ["pyproject.toml"]
-code = ["script.py"]
+code = ["hello.py"]
 
 [tool.pytest.ini_options]
 addopts = """

@@ -11,7 +11,7 @@ repos:
         name: "sync"
         pass_filenames: false
         language: "system"
-        entry: "pwsh Sync-Environment.ps1"
+        entry: "uv run just sync"
       - id: "fawltydeps"
         name: "fawltydeps"
         always_run: true

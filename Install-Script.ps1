@@ -11,7 +11,7 @@ else {
     $Hub = 'https://raw.githubusercontent.com'
     $User = 'blakeNaccarato'
     $Repo = 'script'
-    $Hash = '696dfb0837b52f9f651c87339c726cecc1aa2a55'
+    $Hash = '6f964c50b67fb049ac60c3f4b2cd0fb1b3c05602'
     $ScriptContents = Invoke-RestMethod "$Hub/$User/$Repo/$Hash/$Script"
 }
 

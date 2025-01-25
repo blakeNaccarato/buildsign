@@ -1,6 +1,19 @@
 <#.SYNOPSIS
 Install script.#>
-Param( [string]$Title='hello' )
+
+# ? Get the script contents
+$Title = 'hello'
+$Script = 'hello.py'
+if ($Env:DEV) {
+    $ScriptContents = (Get-Content "$PSScriptRoot/$Script")
+}
+else {
+    $Hub = 'https://raw.githubusercontent.com'
+    $User = 'blakeNaccarato'
+    $Repo = 'script'
+    $Hash = '696dfb0837b52f9f651c87339c726cecc1aa2a55'
+    $ScriptContents = Invoke-RestMethod "$Hub/$User/$Repo/$Hash/$Script"
+}
 
 # ? Set the prompt
 Set-Item -Path 'Function:/prompt' -Value { '> ' }
@@ -39,6 +52,6 @@ function Invoke-Script {
     Invoke script.#>
     [CmdletBinding(PositionalBinding = $False)]
     Param([Parameter(ValueFromPipeline, ValueFromRemainingArguments)][string[]]$Run)
-    Process { uv run --script "$Title.py" $Run }
+    Process { $ScriptContents | uv run --script - $Run }
 }
 Invoke-Script --help

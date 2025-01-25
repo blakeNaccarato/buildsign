@@ -42,8 +42,7 @@ if ($IsWindows) {
 # ? Add `uv` to path and install it if missing
 $Env:PATH = "$HOME/.cargo/bin$([System.IO.Path]::PathSeparator)$Env:PATH"
 if (!(Get-Command 'uv' -ErrorAction 'Ignore')) {
-    if ($IsWindows) { Invoke-RestMethod 'https://astral.sh/uv/install.ps1' | Invoke-Expression }
-    else { curl --proto '=https' --tlsv1.2 -LsSf 'https://astral.sh/uv/install.sh' | sh }
+    powershell -Command "Invoke-RestMethod 'https://astral.sh/uv/install.ps1' | Invoke-Expression"
 }
 
 # ? Define script invocation and display help

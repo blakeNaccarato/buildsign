@@ -3,7 +3,8 @@ Install script.#>
 
 # ? Get the script contents
 $Title = 'hello'
-$Script = 'hello.py'
+$Script = "$Title.py"
+$Icon = "$Title.ico"
 if ($Env:DEV) {
     $ScriptContents = (Get-Content "$PSScriptRoot/$Script")
 }
@@ -12,7 +13,10 @@ else {
     $User = 'blakeNaccarato'
     $Repo = 'script'
     $Hash = '6f964c50b67fb049ac60c3f4b2cd0fb1b3c05602'
-    $ScriptContents = Invoke-RestMethod "$Hub/$User/$Repo/$Hash/$Script"
+    $Url = "$Hub/$User/$Repo/$Hash"
+    $ScriptContents = Invoke-RestMethod "$Url/$Script"
+    $IconPath = "$Env:APPDATA/$Title-$($Hash.Substring(0,7))/$Icon"
+    Invoke-RestMethod "$Url/$Icon" -OutFile $IconPath
 }
 
 # ? Set the prompt

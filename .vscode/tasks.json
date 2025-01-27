@@ -13,6 +13,11 @@
       }
     },
     {
+      "label": "sign",
+      "command": "uv run just sign",
+      "icon": { "id": "pencil" }
+    },
+    {
       "label": "execute",
       "command": "uv run just execute",
       "icon": { "id": "file-binary" }

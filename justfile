@@ -10,6 +10,8 @@ sync:
 
 build:
   iexpress /N '{{title}}.SED'
+sign:
+  ./Sign-Binary.ps1
 execute:
   Start-Process -UseNewEnvironment './{{title}}.exe'
 

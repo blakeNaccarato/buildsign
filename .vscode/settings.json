@@ -16,7 +16,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "*.root": "*.exe, *.ico, *.lock, *.md, *.ps1, *.sed, *.toml, *.yml, *.yaml, .coverage, .env, .gitignore, justfile, LICENSE"
+    "*.root": "*.exe, *.ico, *.json, *.lock, *.md, *.ps1, *.sed, *.toml, *.yml, *.yaml, .coverage, .env, .gitignore, justfile, LICENSE"
   },
   //! File associations
   "files.associations": { ".root": "plaintext" },

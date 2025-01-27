@@ -24,14 +24,14 @@ SourceFiles=SourceFiles
 InstallPrompt=
 DisplayLicense=
 FinishMessage=
-TargetName=hello.EXE
+TargetName=hello.exe
 FriendlyName=hello
 AppLaunched=powershell -NoExit -Command ". ./Install-Script.ps1"
 PostInstallCmd=<None>
 AdminQuietInstCmd=
 UserQuietInstCmd=
-FILE0=hello.py
-FILE1=Install-Script.ps1
+FILE0=./hello.py
+FILE1=./Install-Script.ps1
 [SourceFiles]
 SourceFiles0=.
 [SourceFiles0]

@@ -33,6 +33,7 @@ branch = true
 
 [tool.fawltydeps]
 deps = ["pyproject.toml"]
+code = ["src"]
 
 [tool.pytest.ini_options]
 addopts = """

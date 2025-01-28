@@ -8,7 +8,7 @@ dev := sync + 'uv run '
 sync:
   {{sync}}
 build:
-  uv build --resolution 'lowest-direct'
+  uv build
   $Env:PYAPP_PROJECT_NAME='{{name}}'; $Env:PYAPP_PROJECT_PATH=(Get-ChildItem 'dist' -Filter '*.whl'); cargo install --force 'pyapp' --root '.'
   & 'C:\Program Files (x86)\Resource Hacker\ResourceHacker.exe' -open "bin/pyapp.exe" -save "bin/{{name}}.exe" -action addoverwrite -res "hello.ico" -mask ICONGROUP,MAINICON
   Remove-Item 'bin/pyapp.exe'

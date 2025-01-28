@@ -7,13 +7,11 @@ name = "hello"
 description = "Say hello"
 readme = "README.md"
 license = { file = "LICENSE" }
-# /// script
 version = "0.0.0"
-requires-python = "==3.12.*"
-dependencies = ["cappa==0.26.4"]
-# ///
+requires-python = ">=3.12"
+dependencies = ["cappa>=0.26.3"]
 [project.scripts]
-"hello" = "hello:main"
+"hello" = "hello.__main__:main"
 
 [dependency-groups]
 dev = [
@@ -35,7 +33,6 @@ branch = true
 
 [tool.fawltydeps]
 deps = ["pyproject.toml"]
-code = ["hello.py"]
 
 [tool.pytest.ini_options]
 addopts = """
@@ -46,7 +43,6 @@ addopts = """
     --color=yes
 """
 cache_dir = ".cache/.pytest_cache"
-testpaths = "tests.py"
 xfail_strict = true
 
 [tool.pyright]
@@ -169,7 +165,7 @@ ignore = [
   "C408",    # Allow dict calls
   "COM",     # Allow magic commas and magic missing commas
   "CPY001",  # Don't check for copyright
-  "D105",    # Allow missing docstring for magic methods
+  "D10",     # Allow missing docstrings
   "DTZ",     # Timezones are important, but only contextually necessary.
   "E501",    # Don't check line length. Black handles this.
   "EM",      # Don't check for exception message issues

@@ -1,19 +1,18 @@
 set shell := ['pwsh', '-NonInteractive', '-NoProfile', '-Command']
 set dotenv-load
 
-title := 'hello'
+name := 'hello'
 
-sync := './Sync-Environment -Title ' + title + ' ; '
+sync := 'scripts/Sync-Environment; '
 dev := sync + 'uv run '
 sync:
   {{sync}}
-
 build:
-  Set-PsEnv; cargo install --force pyapp --root '.'; Move-Item -Force 'bin/pyapp.exe' '{{title}}-pyapp.exe'; iexpress /N '{{title}}.SED'
-sign:
-  ./Sign-Binary.ps1
-execute:
-  Start-Process -UseNewEnvironment './{{title}}.exe'
+  uv build --resolution 'lowest-direct'
+  $Env:PYAPP_PROJECT_NAME='{{name}}'; $Env:PYAPP_PROJECT_PATH=(Get-ChildItem 'dist' -Filter '*.whl'); cargo install --force 'pyapp' --root '.'
+  & 'C:\Program Files (x86)\Resource Hacker\ResourceHacker.exe' -open "bin/pyapp.exe" -save "bin/{{name}}.exe" -action addoverwrite -res "hello.ico" -mask ICONGROUP,MAINICON
+  Remove-Item 'bin/pyapp.exe'
+  scripts/Sign-Binaries.ps1
 
 pre-commit *flags :
   uv run pre-commit run --verbose {{flags}}

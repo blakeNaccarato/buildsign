@@ -2,7 +2,7 @@
 
 from cappa.testing import CommandRunner
 
-from hello import Hello
+from hello.__main__ import Hello
 
 
 def test_main():

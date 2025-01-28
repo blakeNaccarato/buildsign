@@ -9,7 +9,6 @@
     "AzurePowerShellCredential",
     "EnvironmentCredential",
     "ManagedIdentityCredential",
-    "SharedTokenCacheCredential",
     "VisualStudioCodeCredential",
     "VisualStudioCredential",
     "WorkloadIdentityCredential"

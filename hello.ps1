@@ -23,16 +23,10 @@ $Host.UI.RawUI.WindowTitle = $Title
     $Title = 'Invoke-Script'
 }.GetEnumerator() | ForEach-Object { Set-Alias -Name $_.Key -Value $_.Value }
 
-# ? Add `uv` to path and install it if missing
-$Env:PATH = "$HOME/.cargo/bin$([System.IO.Path]::PathSeparator)$Env:PATH"
-if (!(Get-Command 'uv' -ErrorAction 'Ignore')) {
-    Invoke-RestMethod 'https://astral.sh/uv/install.ps1' | Invoke-Expression
-}
-
 # ? Define script invocation and display help
 function Invoke-Script {
     [CmdletBinding(PositionalBinding = $False)]
     Param([Parameter(ValueFromPipeline, ValueFromRemainingArguments)][string[]]$Run)
-    Process { uv run --script $Script $Run }
+    Process { & "./$Title-pyapp.exe" $Run }
 }
 Invoke-Script --help

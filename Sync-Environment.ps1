@@ -18,19 +18,5 @@ if ($IsWindows) {
     [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 }
 
-$PyProject = (Get-Content -Raw 'pyproject.toml').TrimEnd("`n").TrimEnd("`r`n")
-$ScriptBlock = Get-Content -Raw "$Title.py" |
-    Select-String -Pattern $Pattern
-Set-Content 'pyproject.toml' (
-    $PyProject -Replace $Pattern, (
-        (
-            $ScriptBlock.Matches.Value -Split "`n" |
-                ForEach-Object {
-                    if ($_ -NotMatch $Token) { $_ -Replace '^# ', '' } else { $_ }
-                }
-        ) -Join "`n"
-    )
-)
-git add 'pyproject.toml'
 uv sync
 if ($IsWindows) { .venv/scripts/activate.ps1 } else { .venv/bin/activate.ps1 }

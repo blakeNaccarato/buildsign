@@ -9,7 +9,7 @@ sync:
   {{sync}}
 
 build:
-  iexpress /N '{{title}}.SED'
+  Set-PsEnv; cargo install --force pyapp --root '.'; Move-Item -Force 'bin/pyapp.exe' 'hello-pyapp.exe'; iexpress /N '{{title}}.SED'
 sign:
   ./Sign-Binary.ps1
 execute:

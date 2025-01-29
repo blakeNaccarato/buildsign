@@ -32,17 +32,17 @@
     },
     {
       "label": "pyright",
-      "command": "uv run just pyright",
+      "command": "uv run pyright",
       "icon": { "id": "check" }
     },
     {
       "label": "pytest",
-      "command": "uv run just pytest",
+      "command": "uv run pytest",
       "icon": { "id": "beaker" }
     },
     {
       "label": "ruff",
-      "command": "uv run just ruff",
+      "command": "uv run ruff",
       "icon": { "id": "check" }
     }
   ]

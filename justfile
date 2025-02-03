@@ -25,7 +25,7 @@ pre-commit *args :
 # TODO: [[bin]]
 # TODO: name = "pyapp"
 # TODO: path = "src/pyapp/main.rs"
-
+# TODO: Include pyapp's license in e.g. LICENSES/ and mention in README
 
 name := 'hello'
 

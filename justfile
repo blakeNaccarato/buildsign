@@ -33,7 +33,7 @@ name := 'hello'
 build \
   $PYAPP_PROJECT_NAME = name \
   $PYAPP_PROJECT_PATH = `"$(Get-ChildItem dist -Filter *.whl)"` \
-  app= ('bin/' + name + '.exe') \
+  app = ('bin/' + name + '.exe') \
   alg = 'SHA256' \
   progx86 = 'C:/Program Files (x86)' \
   pyapp = 'target/release/pyapp.exe' \

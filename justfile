@@ -16,44 +16,44 @@ pytest:
 ruff:
   {{run}} ruff check .
 # Run pre-commit (verbose)
-pre-commit *flags :
-  {{run}} pre-commit run --verbose {{flags}}
+pre-commit *args :
+  {{run}} pre-commit run --verbose {{args}}
+
+# TODO: Make job for https://ofek.dev/pyapp/latest/how-to/#get-pyapp
+# TODO: Replace `src` with `src/pyapp` in `build.rs`
+# TODO: Add the following to `Cargo.toml`...
+# TODO: [[bin]]
+# TODO: name = "pyapp"
+# TODO: path = "src/pyapp/main.rs"
+
+
+name := 'hello'
 
 # Build Windows binaries
 build \
   $PYAPP_PROJECT_NAME = name \
   $PYAPP_PROJECT_PATH = `"$(Get-ChildItem dist -Filter *.whl)"` \
-  : && sign
-    uv build
-    cargo install --force 'pyapp' --root '.'
-    & {{hacker}} \
-      -Open {{pyapp}} \
-      -Save {{app}} \
-      -Action 'addoverwrite' \
-      -Res '{{name}}.ico' \
-      -Mask 'ICONGROUP,MAINICON'
-app := 'bin/' + name + '.exe'
-hacker := quote(progx86 + '/Resource Hacker/ResourceHacker.exe')
-name := 'hello'
-progx86 := 'C:/Program Files (x86)'
-pyapp := 'bin/pyapp.exe'
-
-# Sign Windows binaries
-[script]
-sign:
-  {{pre}}
-  $Sign = @(
-      'sign'
-      '/v'                                         # Verbose output
-      '/debug'                                     # Display debugging information
-      '/fd', '{{alg}}'                             # File digest algorithm
-      '/td', '{{alg}}'                             # Timestamp digest algorithm
-      '/tr', 'http://timestamp.acs.microsoft.com'  # Timestamp server
-      '/dmdf', 'signing.json'                      # Metadata file
-      '/dlib', {{ quote(env('USERPROFILE') + '/.nuget/packages/microsoft.trusted.signing.client/1.0.60/bin/x64/Azure.CodeSigning.Dlib.dll') }}
-      '{{app}}'
-  )
-  & {{signtool}} @Sign
-  Remove-Item {{pyapp}}
-alg := 'SHA256'
-signtool := quote(progx86 + '/Windows Kits/10/bin/10.0.26100.0/x64/signtool.exe')
+  app= ('bin/' + name + '.exe') \
+  alg = 'SHA256' \
+  progx86 = 'C:/Program Files (x86)' \
+  pyapp = 'target/release/pyapp.exe' \
+:
+  uv build
+  cargo build --release
+  git restore 'Cargo.lock'
+  & {{ quote(progx86 + '/Resource Hacker/ResourceHacker.exe') }} \
+    -open {{pyapp}} \
+    -save {{app}} \
+    -action 'addoverwrite' \
+    -res '{{name}}.ico' \
+    -mask 'ICONGROUP,MAINICON'
+  & {{ quote(progx86 + '/Windows Kits/10/bin/10.0.26100.0/x64/signtool.exe') }} \
+    'sign' \
+    '/v' \
+    '/debug' \
+    '/fd' '{{alg}}' \
+    '/td' '{{alg}}' \
+    '/tr' 'http://timestamp.acs.microsoft.com' \
+    '/dmdf' 'signing.json' \
+    '/dlib' {{ quote(env('USERPROFILE') + '/.nuget/packages/microsoft.trusted.signing.client/1.0.60/bin/x64/Azure.CodeSigning.Dlib.dll') }} \
+    '{{app}}'

@@ -16,7 +16,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "*.root": "*.exe, *.ico, *.json, *.just, *.lock, *.md, *.ps1, *.sed, *.toml, *.yml, *.yaml, .coverage, .env, .gitignore, justfile, LICENSE"
+    "*.root": "*.exe, *.ico, *.json, *.just, *.lock, *.md, *.ps1, *.rs, *.sed, *.toml, *.yml, *.yaml, .coverage, .env, .gitignore, justfile, LICENSE"
   },
   //! File associations
   "files.associations": { ".root": "plaintext", "*.just": "just" },
@@ -143,9 +143,8 @@
   //* MyST
   "myst.preview.extensions": ["colon_fence", "dollarmath"],
   // * Python
-  // "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.terminal.activateEnvInCurrentTerminal": false,
   "python.terminal.activateEnvironment": true,
-  "python.terminal.activateEnvInCurrentTerminal": true,
   //* Pylance
   "python.languageServer": "Pylance",
   "python.analysis.diagnosticMode": "openFilesOnly",

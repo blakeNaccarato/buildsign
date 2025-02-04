@@ -21,7 +21,7 @@ pre-commit *args :
 
 name := 'hello'
 
-build:
+build: && build-exe sign
   uv build
 
 # TODO: Make recipe that gets/unzips pyapp sources into `./pyapp`
@@ -31,7 +31,7 @@ build:
 build-exe \
   $PYAPP_PROJECT_NAME = name \
   $PYAPP_PROJECT_PATH = `"$(Get-ChildItem dist -Filter *.whl)"` \
-: build && sign
+:
   cargo build --release
   git restore 'Cargo.lock'
 

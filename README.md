@@ -1,6 +1,6 @@
 # Hello
 
-Say hello.
+An example of signed executable Python binaries using PyApp with caching and Azure Trusted Signing. The generated program is a simple CLI that generates variations on "Hello, <name>" as a proof-of-concept.
 
 ## Attributions
 

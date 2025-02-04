@@ -1,6 +1,6 @@
 # Hello
 
-An example of signed executable Python binaries using PyApp with caching and Azure Trusted Signing. The generated program is a simple CLI that generates variations on "Hello, <name>" as a proof-of-concept.
+An example of signed executable Python binaries using PyApp with caching and Azure Trusted Signing. The generated program is a simple CLI that generates variations on "Hello, <name>" as a proof-of-concept. See build recipes in `justfile`, a work in progress, but currently local building and signing has been implemented. This experiment will inform a project template and GitHub Action that facilitates this for arbitrary Python projects.
 
 ## Attributions
 

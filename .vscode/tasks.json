@@ -5,7 +5,7 @@
   "tasks": [
     {
       "label": "build",
-      "command": "uv run just build",
+      "command": "uv run just build-exe",
       "icon": { "id": "file-binary" },
       "group": {
         "kind": "build",

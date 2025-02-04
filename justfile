@@ -19,28 +19,30 @@ ruff:
 pre-commit *args :
   {{run}} pre-commit run --verbose {{args}}
 
-# TODO: Make job for https://ofek.dev/pyapp/latest/how-to/#get-pyapp
-# TODO: Replace `src` with `src/pyapp` in `build.rs`
-# TODO: Add the following to `Cargo.toml`...
-# TODO: [[bin]]
-# TODO: name = "pyapp"
-# TODO: path = "src/pyapp/main.rs"
-# TODO: Include pyapp's license in e.g. LICENSES/ and mention in README
-
 name := 'hello'
 
+build:
+  uv build
+
+# TODO: Make recipe that gets/unzips pyapp sources into `./pyapp`
+
 # Build Windows binaries
-build \
+[working-directory: 'pyapp']
+build-exe \
   $PYAPP_PROJECT_NAME = name \
   $PYAPP_PROJECT_PATH = `"$(Get-ChildItem dist -Filter *.whl)"` \
-  app = ('bin/' + name + '.exe') \
-  alg = 'SHA256' \
-  progx86 = 'C:/Program Files (x86)' \
-  pyapp = 'target/release/pyapp.exe' \
-:
-  uv build
+: build && sign
   cargo build --release
   git restore 'Cargo.lock'
+
+# Sign Windows binaries
+sign \
+  app = ('bin/' + name + '.exe') \
+  alg = 'SHA256' \
+  dlib_path = '/.nuget/packages/microsoft.trusted.signing.client/1.0.60/bin/x64/Azure.CodeSigning.Dlib.dll' \
+  progx86 = 'C:/Program Files (x86)' \
+  pyapp = 'pyapp/target/release/pyapp.exe' \
+:
   & {{ quote(progx86 + '/Resource Hacker/ResourceHacker.exe') }} \
     -open {{pyapp}} \
     -save {{app}} \
@@ -55,5 +57,5 @@ build \
     '/td' '{{alg}}' \
     '/tr' 'http://timestamp.acs.microsoft.com' \
     '/dmdf' 'signing.json' \
-    '/dlib' {{ quote(env('USERPROFILE') + '/.nuget/packages/microsoft.trusted.signing.client/1.0.60/bin/x64/Azure.CodeSigning.Dlib.dll') }} \
+    '/dlib' {{ quote(env('USERPROFILE') + dlib_path) }} \
     '{{app}}'

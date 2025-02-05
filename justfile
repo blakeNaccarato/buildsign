@@ -84,10 +84,14 @@ build \
 
   #? Build wheel
   @("", "BUILDING WHEEL", {{sep}}) | {{ write_progress }}
-  $Dist = "$InvokeDir/dist"
-  if ( Test-Path $Dist ) { Remove-Item -Recurse -Force $Dist }
-  $DistDir = New-Item -ItemType Directory -Path $Dist
-  uv build
+  $DistDir = "$InvokeDir/dist"
+  if ( Test-Path $DistDir ) { Remove-Item -Recurse -Force $DistDir }
+  $DistDir = New-Item -ItemType Directory -Path $DistDir
+  try {
+    Set-Location $InvokeDir
+    uv build
+  }
+  finally { Set-Location $JustDir }
   $Env:PYAPP_PROJECT_NAME = $Name
   $Env:PYAPP_PROJECT_PATH = "$(Get-ChildItem dist -Filter *.whl)"
   @("BUILT WHEEL") | {{write_complete}}
@@ -113,7 +117,7 @@ build \
 
   #? Change icon
   @("", "CHANGING ICON", {{sep}}) | {{ write_progress }}
-  $App = "$InvokeDir/dist/$Name.exe"
+  $App = "$DistDir/$Name.exe"
   {{start_process}} $Hacker @(
     '-open', $PyApp
     '-save', $App                  #? Save as named binary

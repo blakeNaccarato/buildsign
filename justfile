@@ -92,7 +92,7 @@ build \
     uv build
   }
   finally { Set-Location $JustDir }
-  $Env:PYAPP_PROJECT_PATH = "$(Get-ChildItem dist -Filter *.whl)"
+  $Env:PYAPP_PROJECT_PATH = "$(Get-ChildItem $DistDir -Filter *.whl)"
   @("BUILT WHEEL") | {{write_complete}}
 
   #? Compile binary

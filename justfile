@@ -29,8 +29,12 @@ build: && build-exe sign
 # Build Windows binaries
 [working-directory: 'pyapp']
 build-exe \
+  $PYAPP_EXPOSE_ALL_COMMANDS = '1' \
   $PYAPP_PROJECT_NAME = name \
   $PYAPP_PROJECT_PATH = `"$(Get-ChildItem dist -Filter *.whl)"` \
+  $PYAPP_PYTHON_VERSION = '3.12' \
+  $PYAPP_UV_ENABLED = '1' \
+  $PYAPP_UV_VERSION = '0.5.24' \
 :
   cargo build --release
   git restore 'Cargo.lock'

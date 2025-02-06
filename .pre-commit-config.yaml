@@ -17,12 +17,12 @@ repos:
         name: "sync"
         pass_filenames: false
         language: "system"
-        entry: "uv sync --all-packages"
+        entry: "uv --preview sync --all-packages"
       - id: "fawltydeps-dev"
         name: "fawltydeps-dev"
         pass_filenames: false
         language: "system"
-        entry: "uv run fawltydeps --config-file src/_dev/pyproject.toml"
+        entry: "uv --preview run fawltydeps --config-file src/_dev/pyproject.toml"
         files: |
           (?x)^(
             src/_dev/.*
@@ -31,7 +31,7 @@ repos:
         name: "fawltydeps-buildsign"
         pass_filenames: false
         language: "system"
-        entry: "uv run fawltydeps --config-file src/buildsign/pyproject.toml"
+        entry: "uv --preview run fawltydeps --config-file src/buildsign/pyproject.toml"
         files: |
           (?x)^(
             src/buildsign/.*
@@ -40,7 +40,7 @@ repos:
         name: "fawltydeps-hello"
         pass_filenames: false
         language: "system"
-        entry: "uv run fawltydeps --config-file src/hello/pyproject.toml"
+        entry: "uv --preview run fawltydeps --config-file src/hello/pyproject.toml"
         files: |
           (?x)^(
             src/hello/.*
@@ -50,7 +50,7 @@ repos:
         always_run: true
         pass_filenames: false
         language: "system"
-        entry: "uv run pytest"
+        entry: "uv --preview run pytest"
   - repo: "https://github.com/pre-commit/pre-commit-hooks"
     rev: "v5.0.0"
     hooks:

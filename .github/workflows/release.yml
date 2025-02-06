@@ -21,12 +21,12 @@ jobs:
         with:
           version: "0.5.29"
           enable-cache: true
-      - run: "uv build --preview --package buildsign"
+      - run: "uv --preview build --package buildsign"
       - run: "rm dist/.gitignore"
       - uses: actions/attest-build-provenance@5e9cb68e95676991667494a6a4e59b8a2f13e1d0 # v1.3.3
         with:
           subject-path: "dist/**"
-      - run: "uv publish"
+      - run: "uv --preview publish"
       - run: "gh release create --discussion-category announcements 0.0.0 dist/**"
         env:
           GITHUB_TOKEN: "${{ github.token }}"

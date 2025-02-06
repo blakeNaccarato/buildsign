@@ -7,7 +7,7 @@ set dotenv-load
 set shell := ['pwsh', '-NonInteractive', '-NoProfile', '-Command']
 set script-interpreter := ['pwsh', '-NonInteractive', '-NoProfile']
 
-run := 'uv run'
+run := 'uv --preview run'
 
 pyright:
   {{run}} pyright
@@ -89,7 +89,7 @@ build \
   $DistDir = New-Item -ItemType Directory -Path $DistDir
   try {
     Set-Location $InvokeDir
-    uv build
+    uv --preview build --package $Name
   }
   finally { Set-Location $JustDir }
   $Env:PYAPP_PROJECT_PATH = "$(Get-ChildItem $DistDir -Filter *.whl)"

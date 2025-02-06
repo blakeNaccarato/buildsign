@@ -5,7 +5,7 @@
   "tasks": [
     {
       "label": "build",
-      "command": "uv run just build",
+      "command": "uv --preview run just build",
       "icon": { "id": "file-binary" },
       "group": {
         "kind": "build",
@@ -14,7 +14,7 @@
     },
     {
       "label": "sync",
-      "command": "uv sync --all-packages",
+      "command": "uv --preview sync --all-packages",
       "icon": { "id": "sync" },
       "runOptions": {
         "runOn": "folderOpen"
@@ -22,27 +22,27 @@
     },
     {
       "label": "pre-commit",
-      "command": "uv run just pre-commit",
+      "command": "uv --preview run just pre-commit",
       "icon": { "id": "git-commit" }
     },
     {
       "label": "pre-commit (all files)",
-      "command": "uv run just pre-commit --all-files",
+      "command": "uv --preview run just pre-commit --all-files",
       "icon": { "id": "git-commit" }
     },
     {
       "label": "pyright",
-      "command": "uv run pyright",
+      "command": "uv --preview run pyright",
       "icon": { "id": "check" }
     },
     {
       "label": "pytest",
-      "command": "uv run pytest",
+      "command": "uv --preview run pytest",
       "icon": { "id": "beaker" }
     },
     {
       "label": "ruff",
-      "command": "uv run ruff",
+      "command": "uv --preview run ruff",
       "icon": { "id": "check" }
     },
     {

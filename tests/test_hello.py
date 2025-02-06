@@ -1,7 +1,6 @@
 """Tests."""
 
 from cappa.testing import CommandRunner
-
 from hello.__main__ import Hello
 
 

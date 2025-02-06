@@ -23,7 +23,7 @@ dev = { workspace = true }
 buildsign = { workspace = true }
 hello = { workspace = true }
 [tool.uv.workspace]
-members = ["src/*"]
+members = ["packages/*"]
 
 [tool.coverage.report]
 exclude_also = ['if __name__ == "__main__":']

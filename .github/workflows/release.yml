@@ -30,7 +30,6 @@ jobs:
       - run: "gh release create --discussion-category announcements 0.0.0 dist/**"
         env:
           GITHUB_TOKEN: "${{ github.token }}"
-
   changerelease:
     needs: "release"
     permissions:

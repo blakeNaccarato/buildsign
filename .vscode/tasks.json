@@ -14,7 +14,7 @@
     },
     {
       "label": "sync",
-      "command": "uv sync",
+      "command": "uv sync --all-packages",
       "icon": { "id": "sync" },
       "runOptions": {
         "runOn": "folderOpen"

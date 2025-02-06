@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "buildsign"
+version = "0.0.0"
+authors = [{ name = "Blake Naccarato", email = "blake.naccarato@gmail.com" }]
+description = "Build and sign Python binaries."
+readme = "../../README.md"
+license = { file = "../../LICENSE" }
+requires-python = ">=3.12"
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = ["cappa>=0.26.3"]
+[project.urls]
+Changes = "https://blakeNaccarato.github.io/buildsign/changelog.html"
+Docs = "https://blakeNaccarato.github.io/buildsign"
+Home = "https://github.com/softboiler/buildsign"
+Tracker = "https://github.com/softboiler/buildsign/issues"
+
+[tool.fawltydeps]
+deps = ["src/buildsign/pyproject.toml"]
+code = ["src/buildsign"]
+[project.scripts]
+"buildsign" = "buildsign.__main__:main"

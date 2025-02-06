@@ -1,0 +1,14 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hello"
+version = "0.0.0"
+dependencies = ["cappa>=0.26.3"]
+[project.scripts]
+"hello" = "hello.__main__:main"
+
+[tool.fawltydeps]
+deps = ["src/hello/pyproject.toml"]
+code = ["src/hello"]

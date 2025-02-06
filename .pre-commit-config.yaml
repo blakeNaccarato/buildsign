@@ -5,7 +5,9 @@ exclude: |
 ci:
   skip:
     - "sync"
-    - "fawltydeps"
+    - "fawltydeps-dev"
+    - "fawltydeps-buildsign"
+    - "fawltydeps-hello"
     - "pytest"
   autoupdate_schedule: "quarterly"
 repos:
@@ -15,13 +17,34 @@ repos:
         name: "sync"
         pass_filenames: false
         language: "system"
-        entry: "uv run just sync"
-      - id: "fawltydeps"
-        name: "fawltydeps"
-        always_run: true
+        entry: "uv sync --all-packages"
+      - id: "fawltydeps-dev"
+        name: "fawltydeps-dev"
         pass_filenames: false
         language: "system"
-        entry: "uv run fawltydeps"
+        entry: "uv run fawltydeps --config-file src/_dev/pyproject.toml"
+        files: |
+          (?x)^(
+            src/_dev/.*
+          )$
+      - id: "fawltydeps-buildsign"
+        name: "fawltydeps-buildsign"
+        pass_filenames: false
+        language: "system"
+        entry: "uv run fawltydeps --config-file src/buildsign/pyproject.toml"
+        files: |
+          (?x)^(
+            src/buildsign/.*
+          )$
+      - id: "fawltydeps-hello"
+        name: "fawltydeps-hello"
+        pass_filenames: false
+        language: "system"
+        entry: "uv run fawltydeps --config-file src/hello/pyproject.toml"
+        files: |
+          (?x)^(
+            src/hello/.*
+          )$
       - id: "pytest"
         name: "pytest"
         always_run: true

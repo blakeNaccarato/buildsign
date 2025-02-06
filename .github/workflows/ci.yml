@@ -28,7 +28,7 @@ jobs:
         with:
           version: "0.5.23"
           enable-cache: true
-      - run: "uv run pytest --cov --cov-config=pyproject.toml --cov-report=xml"
+      - run: "uv run --all-packages pytest --cov --cov-config=pyproject.toml --cov-report=xml"
       - if: startsWith(matrix.runner, 'ubuntu')
         uses: "codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673" # v4.5.0
         env:

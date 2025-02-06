@@ -44,6 +44,11 @@
       "label": "ruff",
       "command": "uv run ruff",
       "icon": { "id": "check" }
+    },
+    {
+      "label": "task: Release version",
+      "command": "git tag --sign -m 0.0.0 0.0.0 && git push",
+      "icon": { "id": "tag" }
     }
   ]
 }

@@ -37,7 +37,7 @@ build \
   $PYAPP_EXPOSE_ALL_COMMANDS = '1' \
   $PYAPP_PYTHON_VERSION = '3.12' \
   $PYAPP_UV_ENABLED = '1' \
-  $PYAPP_UV_VERSION = '0.5.24' \
+  $PYAPP_UV_VERSION = '0.5.29' \
 :
   #? Run preamble
   {{pre}}

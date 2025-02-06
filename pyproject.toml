@@ -6,6 +6,7 @@ dependencies = ["cappa>=0.26.3"]
 
 [dependency-groups]
 dev = [
+  "check-wheel-contents>=0.6.1",
   "fawltydeps>=0.18.0",
   "ipykernel>=6.29.5",
   "pre-commit>=4.1.0",

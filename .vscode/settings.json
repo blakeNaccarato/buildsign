@@ -144,7 +144,7 @@
   "myst.preview.extensions": ["colon_fence", "dollarmath"],
   // * Python
   "python.terminal.activateEnvInCurrentTerminal": false,
-  "python.terminal.activateEnvironment": true,
+  "python.terminal.activateEnvironment": false,
   //* Pylance
   "python.languageServer": "Pylance",
   "python.analysis.diagnosticMode": "openFilesOnly",

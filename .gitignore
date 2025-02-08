@@ -1,4 +1,5 @@
 # PyApp
+source.zip
 pyapp/*
 !pyapp/Cargo.lock
 !pyapp/.cargo

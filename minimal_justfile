@@ -1,0 +1,43 @@
+# Settings
+set windows-shell := ['powershell.exe', '-NonInteractive', '-NoProfile', '-Command']
+
+# Project details
+proj_name := 'hello'
+proj_version := '0.0.0'
+pyapp_version := '0.26.0'
+
+# Artifacts
+pyapp := absolute_path( 'pyapp' )
+pyapp_bin := absolute_path( pyapp/'target/release/pyapp.exe' )
+bin := absolute_path( 'dist'/(proj_name+'.exe') )
+
+# Compile binary
+build \
+  $PYAPP_EXPOSE_ALL_COMMANDS = '1' \
+  $PYAPP_PYTHON_VERSION = '3.12' \
+  $PYAPP_PROJECT_NAME = proj_name \
+  $PYAPP_UV_ENABLED = '1' \
+  $PYAPP_UV_VERSION = '0.5.29' \
+  $PYAPP_PROJECT_PATH = absolute_path( 'dist'/proj_name+'-'+proj_version+'-py3-none-any.whl' ) \
+: _get_pyapp_sources && _remove_stale
+  uv --preview build --package 'hello'
+  cd '{{pyapp}}'; cargo build --release
+  {{ if path_exists(bin) == "true" { "rm " + bin } else {""} }}
+  mv '{{pyapp_bin}}' '{{bin}}'
+
+# Remove possibly stale PyApp installation
+_remove_stale:
+  {{bin}} self remove
+
+# TODO: Implement bash version as well
+# Get PyApp sources
+_get_pyapp_sources:
+  {{ if path_exists(pyapp) == 'true' { "" } else { __get_pyapp_sources } }}
+__get_pyapp_sources := \
+  "Invoke-WebRequest" \
+  + " 'https://github.com/ofek/pyapp/releases/download/v" + pyapp_version + "/source.zip'" \
+  + " -OutFile 'source.zip'; " \
+  + zip + " 'x' 'source.zip'; " \
+  + "mv 'pyapp-v*' 'pyapp'; " \
+  + "rm 'source.zip'"
+zip := if os_family()=='windows' {require( '7z.exe' )} else {require( 'tar' )}

@@ -1,10 +1,9 @@
-from shlex import split
 from subprocess import run
 
 from cappa.base import command, invoke
 
 import hello
-from hello import encode_powershell_script, windows_client_double_clicked
+from hello import pwsh_args, windows_client_double_clicked
 
 
 @command
@@ -23,13 +22,13 @@ class Hello:
 def windows_client_run_interactive():
     """Run the package interactively on Windows."""
     run(
-        args=[
-            *split("powershell -NoExit -EncodedCommand"),
-            encode_powershell_script(f"""
-                $Env:PATH = "$(Get-Location);$Env:PATH"
-                {hello.__name__} --help
-            """),
-        ],
+        args=pwsh_args(
+            f"""\
+            $Env:PATH = "$(Get-Location);$Env:PATH"
+            {hello.__name__} --help
+            """,
+            "-NoExit",
+        ),
         check=True,
     )
 

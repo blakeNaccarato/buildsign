@@ -1,35 +1,38 @@
-#? Settings
+#? Load `.env`
 set dotenv-load
-set unstable
-
-#? Shells
+#? Set shells
 set windows-shell := ['powershell.exe', '-NonInteractive', '-NoProfile', '-Command']
 set shell := ['bash', '--noprofile', '--norc', '--posix', '-c']
-
-#? Reusable shell preambles
-preamble := '. scripts/preamble' + (if os_family()=='windows' { '.ps1' } else {'.sh'})
-preamble_cd := preamble + ' ' + invocation_dir()
+#? Set up reusable shell preambles
+p := '. scripts/preamble' + (if os_family()=='windows' { '.ps1' } else {'.sh'})
+pcd := p + ' ' + invocation_dir()
 
 #? Basic commands
 
 run cmd:
-  {{preamble}}; {{cmd}}
+  {{p}}; {{cmd}}
 uv *args:
-  {{preamble}}; uv {{args}}
+  {{p}}; uv {{args}}
 uvr *args:
-  {{preamble}}; {{_uvr}} {{args}}
+  {{p}}; {{_uvr}} {{args}}
+py *args:
+  {{p}}; {{_uvr}} 'python' {{args}}
+pyc cmd:
+  {{p}}; {{_uvr}} 'python' '-c' '{{cmd}}'
+pym *args:
+  {{p}}; {{_uvr}} 'python' '-m' {{args}}
 _uvr := 'uv run'
 
 #? Common tasks
 
 pyright:
-  {{_uvr}} pyright
+  {{p}}; {{_uvr}} pyright
 pytest:
-  {{_uvr}} pytest
+  {{p}}; {{_uvr}} pytest
 ruff:
-  {{_uvr}} ruff check .
+  {{p}}; {{_uvr}} ruff check .
 pre-commit *args:
-  {{_uvr}} pre-commit run --verbose {{args}}
+  {{p}}; {{_uvr}} pre-commit run --verbose {{args}}
 
 #? Build
 
@@ -41,9 +44,10 @@ uv_version := trim(read('.uv-version'))
 #* Project details
 proj_name := 'hello'
 proj_version := '0.0.0'
-proj_icon := if path_exists(absolute_path( invocation_dir()/_icon )) == 'true' \
-  {absolute_path( invocation_dir()/_icon )} \
-  else {absolute_path( invocation_dir()/_default_icon )}
+proj_icon := if path_exists(absolute_path( _icon_dir/_icon )) == 'true' \
+  {absolute_path( _icon_dir/_icon )} \
+  else {absolute_path( _icon_dir/_default_icon )}
+_icon_dir := absolute_path( invocation_dir()/'data' )
 _icon := proj_name + '.ico'
 _default_icon := 'default.ico'
 
@@ -67,12 +71,12 @@ build: _build _compile _change_icon _sign
 
 # Build wheel
 _build:
-  {{preamble_cd}}; uv build --package '{{proj_name}}'
+  {{p}} '{{invocation_dir()}}'; uv build --package '{{proj_name}}'
 
 #? Get PyApp sources
 # TODO: Implement bash version as well
 __get_pyapp_sources := \
-  preamble + '; ' \
+  p + '; ' \
   + "Invoke-WebRequest" \
   + " 'https://github.com/ofek/pyapp/releases/download/v" + pyapp_version + "/source.zip'" \
   + " -OutFile 'source.zip'; " \
@@ -93,19 +97,23 @@ _compile \
   $PYAPP_UV_ENABLED = '1' \
   $PYAPP_UV_VERSION = uv_version \
   $PYAPP_PROJECT_PATH = wheel \
-: _get_pyapp_sources
-  {{preamble}} '{{pyapp}}'; cargo build --release
-  git restore '{{cargo_lock}}'
-  {{ if path_exists(bin) == "true" { "rm " + bin } else {""} }}
-  mv '{{pyapp_bin}}' '{{bin}}'
+: _get_pyapp_sources && _remove_stale
+  {{p}} '{{pyapp}}'; cargo build --release
+  {{p}}; git restore '{{cargo_lock}}'
+  {{p}}; {{ if path_exists(bin) == "true" { "rm " + bin } else {""} }}
+  {{p}}; mv '{{pyapp_bin}}' '{{bin}}'
+
+# Remove possibly stale PyApp installation
+_remove_stale:
+  {{p}}; {{bin}} self remove
 
 # Change icon
 _change_icon:
-  {{preamble}}; {{rcedit}} '{{bin}}' --set-icon '{{proj_icon}}'
+  {{p}}; {{rcedit}} '{{bin}}' --set-icon '{{proj_icon}}'
 
 # Sign binary
 _sign account='blake-naccarato' profile='blake-naccarato':
-  {{preamble_cd}}; {{jsign}} \
+  {{p}} '{{invocation_dir()}}'; {{jsign}} \
     --storetype 'TRUSTEDSIGNING' \
     --keystore 'wus3.codesigning.azure.net' \
     --alias '{{account}}/{{profile}}' \

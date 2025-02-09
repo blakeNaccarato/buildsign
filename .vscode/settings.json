@@ -15,9 +15,7 @@
   "explorer.sortOrder": "foldersNestsFiles",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
-  "explorer.fileNesting.patterns": {
-    "*.root": "*.exe, *.ico, *.json, *.just, *.lock, *.md, *.ps1, *.rs, *.sed, *.toml, *.yml, *.yaml, .coverage, .env, .gitignore, justfile, LICENSE"
-  },
+  "explorer.fileNesting.patterns": { "*.root": ".*" },
   //! File associations
   "files.associations": { ".root": "plaintext", "*.just": "just" },
   //! Git
@@ -210,8 +208,6 @@
   "[just]": { "editor.tabSize": 2, "editor.wordWrap": "off" },
   //* ruff (PY, IPYNB)
   "ruff.importStrategy": "fromEnvironment",
-  "ruff.lint.args": ["--config", "pyproject.toml"],
-  "ruff.format.args": ["--config", "pyproject.toml"],
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.wordWrap": "off"

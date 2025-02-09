@@ -140,10 +140,12 @@ reportUnnecessaryTypeIgnoreComment = "none"
 reportUnusedCallResult = "none"
 
 [tool.ruff]
+preview = true
 cache-dir = ".cache/.ruff_cache"
 output-format = "grouped"
 fix = true
 show-fixes = true
+src = ["docs", "packages", "scripts", "src", "tests"]
 [tool.ruff.lint]
 fixable = ["ALL"]
 select = [
@@ -163,6 +165,7 @@ ignore = [
   "COM",     # Allow magic commas and magic missing commas
   "CPY001",  # Don't check for copyright
   "D10",     # Allow missing docstrings
+  "DOC",     # Don't require documented returns, yields, exceptions, etc.
   "DTZ",     # Timezones are important, but only contextually necessary.
   "E501",    # Don't check line length. Black handles this.
   "EM",      # Don't check for exception message issues

@@ -144,18 +144,49 @@
   "python.terminal.activateEnvInCurrentTerminal": false,
   "python.terminal.activateEnvironment": false,
   //* Pylance
-  "python.languageServer": "Pylance",
-  "python.analysis.diagnosticMode": "openFilesOnly",
   "editor.inlayHints.enabled": "offUnlessPressed",
   "python.analysis.autoFormatStrings": true,
   "python.analysis.autoImportCompletions": true,
+  "python.analysis.autoIndent": true,
+  "python.analysis.completeFunctionParens": false,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.disableTaggedHints": false,
+  "python.analysis.displayEnglishDiagnostics": false,
+  "python.analysis.enablePytestSupport": true,
+  "python.analysis.enableSyncServer": false,
   "python.analysis.extraCommitChars": true,
+  "python.analysis.generateWithTypeAnnotation": true,
   "python.analysis.gotoDefinitionInStringLiteral": true,
   "python.analysis.importFormat": "absolute",
+  "python.analysis.includeAliasesFromUserFiles": true,
+  "python.analysis.indexing": true,
   "python.analysis.inlayHints.callArgumentNames": "all",
   "python.analysis.inlayHints.functionReturnTypes": true,
   "python.analysis.inlayHints.pytestParameters": true,
   "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.languageServerMode": "full",
+  "python.analysis.logLevel": "Information",
+  "python.analysis.persistAllIndices": true,
+  "python.analysis.regenerateStdLibIndices": true,
+  "python.analysis.reportExtraTelemetry": false,
+  "python.analysis.showOnlyDirectDependenciesInAutoImport": false,
+  "python.analysis.supportDocstringTemplate": true,
+  "python.analysis.supportRestructuredText": true,
+  "python.analysis.userFileIndexingLimit": -1,
+  "python.languageServer": "Pylance",
+  "python.analysis.aiCodeActions": {
+    "implementAbstractClasses": true,
+    "generateDocstring": true,
+    "generateSymbol": true
+  },
+  "python.analysis.fixAll": [
+    "source.convertImportFormat",
+    "source.unusedImports"
+  ],
+  "python.analysis.packageIndexDepths": [
+    { "name": "", "depth": 16, "includeAllSymbols": true }
+  ],
+
   //* PowerShell
   "powershell.startAutomatically": false,
   "powershell.promptToUpdatePowerShell": false,
@@ -223,6 +254,41 @@
     "editor.wordWrap": "off"
   },
   "evenBetterToml.taplo.configFile.path": ".taplo.toml",
+  //* Automatically synchronized environment variables
+  //! PLEASE MODIFY `pyproject.toml:tool.boilercv_dev.env` AND RUN `./Invoke-Uv -Sync`
+  "terminal.integrated.env.linux": {
+    "COVERAGE_CORE": "sysmon",
+    "JUPYTER_PLATFORM_DIRS": "1",
+    "PYDEVD_DISABLE_FILE_VALIDATION": "1",
+    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2024.6.1",
+    "PYTHONIOENCODING": "utf-8:strict",
+    "PYTHONUTF8": "1",
+    "PYTHONWARNDEFAULTENCODING": "1",
+    "PYTHONWARNINGS": "ignore",
+    "UV_PREVIEW": "1"
+  },
+  "terminal.integrated.env.osx": {
+    "COVERAGE_CORE": "sysmon",
+    "JUPYTER_PLATFORM_DIRS": "1",
+    "PYDEVD_DISABLE_FILE_VALIDATION": "1",
+    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2024.6.1",
+    "PYTHONIOENCODING": "utf-8:strict",
+    "PYTHONUTF8": "1",
+    "PYTHONWARNDEFAULTENCODING": "1",
+    "PYTHONWARNINGS": "ignore",
+    "UV_PREVIEW": "1"
+  },
+  "terminal.integrated.env.windows": {
+    "COVERAGE_CORE": "sysmon",
+    "JUPYTER_PLATFORM_DIRS": "1",
+    "PYDEVD_DISABLE_FILE_VALIDATION": "1",
+    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2024.6.1",
+    "PYTHONIOENCODING": "utf-8:strict",
+    "PYTHONUTF8": "1",
+    "PYTHONWARNDEFAULTENCODING": "1",
+    "PYTHONWARNINGS": "ignore",
+    "UV_PREVIEW": "1"
+  },
   //! Other
   //? Other automatically added settings below
   "": ""

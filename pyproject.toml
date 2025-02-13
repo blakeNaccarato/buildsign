@@ -1,5 +1,5 @@
 [project]
-name = "buildsign-dev"
+name = "buildsign-root"
 version = "0.0.0"
 requires-python = ">=3.12"
 dependencies = ["cappa>=0.26.3"]
@@ -19,7 +19,7 @@ dev = [
 ]
 
 [tool.uv.sources]
-dev = { workspace = true }
+buildsign-dev = { workspace = true }
 buildsign = { workspace = true }
 hello = { workspace = true }
 [tool.uv.workspace]
@@ -29,7 +29,7 @@ members = ["packages/*"]
 exclude_also = ['if __name__ == "__main__":']
 [tool.coverage.run]
 branch = true
-source = ["buildsign", "dev", "hello", "tests"]
+source = ["buildsign", "buildsign-dev", "hello", "tests"]
 
 [tool.pytest.ini_options]
 addopts = """
@@ -44,6 +44,8 @@ xfail_strict = true
 
 [tool.pyright]
 typeCheckingMode = "strict"
+include = ["docs", "packages", "scripts", "tests"]
+ignore = ["**/.*", "*:/**/.*", "*:/**/appdata", "**/pyapp"]
 # Default "true" in strict
 analyzeUnannotatedFunctions = true
 strictParameterNoneValue = true
@@ -145,7 +147,7 @@ cache-dir = ".cache/.ruff_cache"
 output-format = "grouped"
 fix = true
 show-fixes = true
-src = ["docs", "packages", "scripts", "src", "tests"]
+src = ["docs", "packages", "scripts", "tests"]
 [tool.ruff.lint]
 fixable = ["ALL"]
 select = [

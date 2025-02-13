@@ -10,5 +10,5 @@ dependencies = ["cappa>=0.26.3"]
 "hello" = "hello.__main__:main"
 
 [tool.fawltydeps]
-deps = ["src/hello/pyproject.toml"]
-code = ["src/hello"]
+deps = ["packages/hello/pyproject.toml"]
+code = ["packages/hello"]

@@ -22,28 +22,28 @@ repos:
         name: "fawltydeps-dev"
         pass_filenames: false
         language: "system"
-        entry: "uv --preview run fawltydeps --config-file src/_dev/pyproject.toml"
+        entry: "uv --preview run fawltydeps --config-file packages/_dev/pyproject.toml"
         files: |
           (?x)^(
-            src/_dev/.*
+            packages/_dev/.*
           )$
       - id: "fawltydeps-buildsign"
         name: "fawltydeps-buildsign"
         pass_filenames: false
         language: "system"
-        entry: "uv --preview run fawltydeps --config-file src/buildsign/pyproject.toml"
+        entry: "uv --preview run fawltydeps --config-file packages/buildsign/pyproject.toml"
         files: |
           (?x)^(
-            src/buildsign/.*
+            packages/buildsign/.*
           )$
       - id: "fawltydeps-hello"
         name: "fawltydeps-hello"
         pass_filenames: false
         language: "system"
-        entry: "uv --preview run fawltydeps --config-file src/hello/pyproject.toml"
+        entry: "uv --preview run fawltydeps --config-file packages/hello/pyproject.toml"
         files: |
           (?x)^(
-            src/hello/.*
+            packages/hello/.*
           )$
       - id: "pytest"
         name: "pytest"

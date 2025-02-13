@@ -3,13 +3,13 @@ requires = ["uv==0.5.29"]
 build-backend = "uv"
 
 [project]
-name = "dev"
+name = "buildsign-dev"
 version = "0.0.0"
 dependencies = ["cappa>=0.26.3"]
 [project.scripts]
-"dev" = "dev.__main__:main"
+"buildsign-dev" = "dev.__main__:main"
 
 [tool.fawltydeps]
-deps = ["src/_dev/pyproject.toml"]
-code = ["src/_dev", "tests"]
+deps = ["packages/_dev/pyproject.toml"]
+code = ["packages/_dev", "tests"]
 ignore_undeclared = ["hello"]

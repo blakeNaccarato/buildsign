@@ -131,6 +131,7 @@ class CLI:
     def __call__(self):
         name = "hello"
         version = "0.0.0"
+        rmtree(const.dist, ignore_errors=True)
         build(name=name, out_dir=const.dist)
         const.cache.mkdir(exist_ok=True)
         if not const.pyapp_checkpoint.exists():

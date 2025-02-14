@@ -14,7 +14,7 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3.12",
 ]
-dependencies = ["cappa>=0.26.3", "platformdirs>=4.3.6", "uv>=0.5.29"]
+dependencies = ["cappa>=0.26.3", "httpx>=0.28.1", "platformdirs>=4.3.6"]
 [project.urls]
 Changes = "https://blakeNaccarato.github.io/buildsign/changelog.html"
 Docs = "https://blakeNaccarato.github.io/buildsign"

@@ -1,63 +1,46 @@
 from dataclasses import dataclass, field
-from importlib import metadata, resources
+from importlib import resources
 from importlib.metadata import version
 from pathlib import Path
-from sys import version_info
 
 from platformdirs import user_cache_path
-from uv import find_uv_bin
 
 import buildsign
 
 __all__ = ["const"]
 
 NAME = buildsign.__name__
-
-
-@dataclass
-class Versions:
-    self: str = field(default=version(NAME))
-    just: str = field(default=version("rust-just"))
-    pyapp: str = "0.26.0"
-    python: str = f"{version_info.major}.{version_info.minor}"
-    uv: str = field(default=version("uv"))
-
-
-VERSIONS = Versions()
-
-
-@dataclass
-class Cache:
-    root: Path = user_cache_path() / NAME
-    dist: Path = root / "dist"
-    build: Path = root / "pyapp"
-    # TODO: Persist pyapp sources
-
-    def __post_init__(self):
-        self.root.mkdir(exist_ok=True)
+DIST = "dist"
+PYAPP = "pyapp"
+CARGO_LOCK = "Cargo.lock"
+SIGNER = "blake-naccarato"
 
 
 @dataclass
 class Constants:
     name: str = buildsign.__name__
-    versions: Versions = field(default_factory=Versions)
-    root: Path = Path(resources.files(buildsign))  # pyright: ignore[reportArgumentType]
-    cache: Cache = field(default_factory=Cache)
-    just: Path = field(
-        default=Path(
-            next(
-                p
-                for p in (metadata.files("rust-just") or [])
-                if p.stem.endswith("just")
-            ).locate()
-        ).resolve()
-    )
-    uv: Path = field(default=Path(find_uv_bin()))
-    justfile: Path = root / "justfile"
-    pyapp: Path = root / "pyapp"
-    scripts: Path = root / "scripts"
-    sign_account: str = "blake-naccarato"
-    sign_profile: str = sign_account
+
+    buildsign_version: str = field(default=version(NAME))
+    pyapp_version: str = "0.26.0"
+    python_version: str = "3.12"
+    uv_version: str = "0.5.29"
+
+    files: Path = Path(resources.files(buildsign))  # pyright: ignore[reportArgumentType]
+    default_icon: Path = files / "default.ico"
+    cargo_config: Path = files / "cargo-config.toml"
+
+    sign_account: str = SIGNER
+    sign_profile: str = SIGNER
+
+    proj_dist: Path = Path(DIST)
+
+    cache: Path = user_cache_path() / NAME
+    pyapp_checkpoint_root: Path = cache / f"{PYAPP}-checkpoint"
+    pyapp_checkpoint: Path = pyapp_checkpoint_root / f"{PYAPP}-v{pyapp_version}"
+    cargo_lock_checkpoint: Path = pyapp_checkpoint / CARGO_LOCK
+    dist: Path = cache / DIST
+    pyapp: Path = cache / PYAPP
+    cargo_lock: Path = pyapp / CARGO_LOCK
 
 
 const = Constants()

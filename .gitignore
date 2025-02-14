@@ -1,8 +1,8 @@
 # PyApp
 source.zip
-**/pyapp/*
-!**/pyapp/Cargo.lock
-!**/pyapp/.cargo
+pyapp/*
+!pyapp/Cargo.lock
+!pyapp/.cargo
 
 # Build artifacts
 *.exe

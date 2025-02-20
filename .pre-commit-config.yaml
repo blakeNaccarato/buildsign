@@ -4,7 +4,6 @@ exclude: |
   )$
 ci:
   skip:
-    - "sync"
     - "fawltydeps-dev"
     - "fawltydeps-buildsign"
     - "fawltydeps-hello"
@@ -13,16 +12,11 @@ ci:
 repos:
   - repo: "local"
     hooks:
-      - id: "sync"
-        name: "sync"
-        pass_filenames: false
-        language: "system"
-        entry: "uv --preview sync --all-packages"
       - id: "fawltydeps-dev"
         name: "fawltydeps-dev"
         pass_filenames: false
         language: "system"
-        entry: "uv --preview run fawltydeps --config-file packages/_dev/pyproject.toml"
+        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 fawltydeps --config-file packages/_dev/pyproject.toml'"
         files: |
           (?x)^(
             packages/_dev/.*
@@ -31,7 +25,7 @@ repos:
         name: "fawltydeps-buildsign"
         pass_filenames: false
         language: "system"
-        entry: "uv --preview run fawltydeps --config-file packages/buildsign/pyproject.toml"
+        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 fawltydeps --config-file packages/buildsign/pyproject.toml'"
         files: |
           (?x)^(
             packages/buildsign/.*
@@ -40,7 +34,7 @@ repos:
         name: "fawltydeps-hello"
         pass_filenames: false
         language: "system"
-        entry: "uv --preview run fawltydeps --config-file packages/hello/pyproject.toml"
+        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 fawltydeps --config-file packages/hello/pyproject.toml'"
         files: |
           (?x)^(
             packages/hello/.*
@@ -59,6 +53,7 @@ repos:
       - id: "destroyed-symlinks"
       - id: "detect-private-key"
       - id: "end-of-file-fixer"
+      - id: "mixed-line-ending"
       - id: "trailing-whitespace"
         args: [--markdown-linebreak-ext=md]
       - id: "trailing-whitespace"

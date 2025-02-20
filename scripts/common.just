@@ -1,0 +1,43 @@
+#* Reusable shell preamble
+pwsh_pre := '.' + sp + 'scripts/pre.ps1;'
+
+#* File extensions
+sh_ext :=\
+  if os_family()=='windows' { '.ps1' } else { '.sh' }
+bin_ext :=\
+  if os_family()=='windows' { '.exe' } else { empty }
+cmd_ext :=\
+  if os_family()=='windows' { '.cmd' } else { empty }
+
+#* Explicit empty string used whenever `''` is intentional.
+#? Empty strings are important for Just conditionals and coalescing operators like `||`
+empty :=\
+  ''
+
+#* Single space
+sp :=\
+  ' '
+
+#* Double quote. Use `quote(...)` instead for single-quotes
+dquote :=\
+  '"'
+
+#* Used to represent a null result where Just would otherwise mishandle a ''
+null :=\
+  RED+'$null'+NORMAL
+
+#* Certain functions return true/false
+true :=\
+  'true'
+false :=\
+  'false'
+
+#* Styles to delineate scripts and output
+script :=\
+  '#' + sp + CYAN + 'SCRIPT...' + NORMAL
+output :=\
+  '#' + sp + CYAN + 'OUTPUT...' + NORMAL
+
+#* Just
+_just :=\
+  'uvx --from' + sp + quote('rust-just@' + trim(read('.just-version'))) + sp + 'just --explain'

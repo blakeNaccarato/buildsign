@@ -15,7 +15,7 @@
   "explorer.sortOrder": "foldersNestsFiles",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
-  "explorer.fileNesting.patterns": { "*.root": ".*" },
+  "explorer.fileNesting.patterns": { "*.root": ".*, uv.lock" },
   //! File associations
   "files.associations": { ".root": "plaintext", "*.just": "just" },
   //! Git
@@ -255,12 +255,12 @@
   },
   "evenBetterToml.taplo.configFile.path": ".taplo.toml",
   //* Automatically synchronized environment variables
-  //! PLEASE MODIFY `pyproject.toml:tool.boilercv_dev.env` AND RUN `./Invoke-Uv -Sync`
+  //! PLEASE MODIFY `pyproject.toml:tool.buildsign_dev.env` AND RUN `./Invoke-Uv -Sync`
   "terminal.integrated.env.linux": {
     "COVERAGE_CORE": "sysmon",
     "JUPYTER_PLATFORM_DIRS": "1",
     "PYDEVD_DISABLE_FILE_VALIDATION": "1",
-    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2024.6.1",
+    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2025.2.1",
     "PYTHONIOENCODING": "utf-8:strict",
     "PYTHONUTF8": "1",
     "PYTHONWARNDEFAULTENCODING": "1",
@@ -271,7 +271,7 @@
     "COVERAGE_CORE": "sysmon",
     "JUPYTER_PLATFORM_DIRS": "1",
     "PYDEVD_DISABLE_FILE_VALIDATION": "1",
-    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2024.6.1",
+    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2025.2.1",
     "PYTHONIOENCODING": "utf-8:strict",
     "PYTHONUTF8": "1",
     "PYTHONWARNDEFAULTENCODING": "1",
@@ -282,7 +282,7 @@
     "COVERAGE_CORE": "sysmon",
     "JUPYTER_PLATFORM_DIRS": "1",
     "PYDEVD_DISABLE_FILE_VALIDATION": "1",
-    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2024.6.1",
+    "PYRIGHT_PYTHON_PYLANCE_VERSION": "2025.2.1",
     "PYTHONIOENCODING": "utf-8:strict",
     "PYTHONUTF8": "1",
     "PYTHONWARNDEFAULTENCODING": "1",

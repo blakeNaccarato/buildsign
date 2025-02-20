@@ -2,53 +2,124 @@
   "version": "2.0.0",
   "type": "shell",
   "problemMatcher": ["$python"],
+  "inputs": [
+    {
+      "id": "args",
+      "description": "Recipe arguments",
+      "type": "promptString",
+      "default": ""
+    },
+    {
+      "id": "python",
+      "type": "pickString",
+      "description": "Python recipe to run",
+      "default": "",
+      "options": ["", "script", "gui-script", "module"]
+    },
+    {
+      "id": "tool",
+      "type": "pickString",
+      "description": "Tool recipe to run",
+      "options": ["pre-commit", "pyright", "ruff", "pytest", "docs"]
+    },
+    {
+      "id": "packaging",
+      "type": "pickString",
+      "description": "Packaging recipe to run",
+      "options": ["build", "release"]
+    },
+    {
+      "id": "mach",
+      "type": "pickString",
+      "description": "Machine setup recipe to run",
+      "options": ["scripts", "git-recs", "gh"]
+    },
+    {
+      "id": "name",
+      "type": "promptString",
+      "description": "Git setup: Enter your GitHub username"
+    },
+    {
+      "id": "email",
+      "type": "promptString",
+      "description": "Git setup: Enter the email address associated with your GitHub account"
+    }
+  ],
   "tasks": [
     {
-      "label": "build",
-      "command": "uv --preview run just build",
-      "icon": { "id": "file-binary" },
+      "label": "Contributor environment setup",
+      "detail": "Set up the contributor environment",
+      "icon": { "color": "terminal.ansiYellow", "id": "star-full" },
+      "command": "./j.ps1 contrib-setup",
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "Run",
+      "detail": "Run a shell command",
+      "icon": { "color": "terminal.ansiCyan", "id": "run" },
+      "command": "./j.ps1 run ${input:args}"
+    },
+    {
+      "label": "uv",
+      "detail": "Run uv",
+      "icon": { "color": "terminal.ansiMagenta", "id": "star-full" },
+      "command": "./j.ps1 uv ${input:args}"
+    },
+    {
+      "label": "uv run",
+      "detail": "Run something with uv",
+      "icon": { "color": "terminal.ansiMagenta", "id": "run" },
+      "command": "./j.ps1 uv-run ${input:args}"
+    },
+    {
+      "label": "uv sync (with args)",
+      "detail": "Sync the contributor environment",
+      "icon": { "color": "terminal.ansiMagenta", "id": "sync" },
+      "command": "./j.ps1 uv-sync ${input:args}"
+    },
+    {
+      "label": "Python",
+      "detail": "Run a Python recipe",
+      "icon": { "color": "terminal.ansiYellow", "id": "snake" },
+      "command": "./j.ps1 py-${input:python} ${input:args}"
+    },
+    {
+      "label": "Packaging",
+      "detail": "Run a Packaging recipe",
+      "icon": { "color": "terminal.ansiRed", "id": "package" },
+      "command": "./j.ps1 pkg-${input:python} ${input:args}"
+    },
+    {
+      "label": "Build",
+      "detail": "Run the default build recipe",
+      "icon": { "color": "terminal.ansiRed", "id": "package" },
       "group": {
         "kind": "build",
         "isDefault": true
-      }
+      },
+      "command": "./j.ps1 pkg-build"
     },
     {
-      "label": "sync",
-      "command": "uv --preview sync --all-packages",
-      "icon": { "id": "sync" },
-      "runOptions": {
-        "runOn": "folderOpen"
-      }
+      "label": "Test",
+      "detail": "Run the default test recipe",
+      "command": "./j.ps1 tool-pytest",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "icon": { "color": "terminal.ansiGreen", "id": "beaker" }
     },
     {
-      "label": "pre-commit",
-      "command": "uv --preview run just pre-commit",
-      "icon": { "id": "git-commit" }
+      "label": "Machine setup",
+      "detail": "Run machine setup recipes",
+      "icon": { "id": "device-desktop" },
+      "command": "./j.ps1 mach-${input:mach} ${input:args}"
     },
     {
-      "label": "pre-commit (all files)",
-      "command": "uv --preview run just pre-commit --all-files",
-      "icon": { "id": "git-commit" }
-    },
-    {
-      "label": "pyright",
-      "command": "uv --preview run pyright",
-      "icon": { "id": "check" }
-    },
-    {
-      "label": "pytest",
-      "command": "uv --preview run pytest",
-      "icon": { "id": "beaker" }
-    },
-    {
-      "label": "ruff",
-      "command": "uv --preview run ruff",
-      "icon": { "id": "check" }
-    },
-    {
-      "label": "task: Release version",
-      "command": "git tag --sign -m 0.0.0 0.0.0 && git push",
-      "icon": { "id": "tag" }
+      "label": "Machine setup: Git",
+      "detail": "Set up Git",
+      "icon": { "id": "device-desktop" },
+      "command": "./j.ps1 mach-git ${input:name} ${input:email}"
     }
   ]
 }

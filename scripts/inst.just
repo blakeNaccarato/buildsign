@@ -295,7 +295,7 @@ brew_bin :=\
   || if path_exists('/opt/homebrew/bin/brew')==true { '/opt/homebrew/bin/brew' } else { empty } \
   || null
 # ❌ Install Homebrew.
-[windows, macos, group('❌ N/A for this OS')]
+[windows, linux, group('❌ N/A for this OS')]
 brew:
   @{{quote(GREEN+_brew_name+sp+_na+NORMAL)}}
 _brew_found_msg :=\

@@ -76,7 +76,7 @@ jobs:
         with:
           version: "0.5.29"
           enable-cache: true
-      - run: ". ./dev && iuv pre-commit run fawltydeps-src && iuv pre-commit run fawltydeps-dev"
+      - run: "./j.ps1 ci pca fawltydeps-dev; ./j.ps1 pca fawltydeps-buildsign; ./j.ps1 pca fawltydeps-hello"
   pyright:
     runs-on: "ubuntu-22.04"
     steps:

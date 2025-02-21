@@ -1,7 +1,7 @@
 <#.SYNOPSIS
 Run recipes.#>
 [CmdletBinding()]
-Param([Parameter(ValueFromRemainingArguments)][string[]]$Args)
+Param([Parameter(ValueFromRemainingArguments)][string[]]$RemainingArgs)
 
 #? Source common shell config
 . ./scripts/pre.ps1
@@ -14,6 +14,7 @@ $Env:DEV_ENV = ''
     BUILDSIGN_VERSION              = '0.0.0'
     COVERAGE_CORE                  = 'sysmon'
     JUPYTER_PLATFORM_DIRS          = '1'
+    JUST_COLOR                     = $Env:CI ? 'always' : $null
     JUST_COMMAND_COLOR             = 'purple'
     JUST_LIST_SUBMODULES           = 'true'
     JUST_UNSORTED                  = 'true'
@@ -37,15 +38,14 @@ $Env:DEV_ENV = ''
 }
 $Env:DEV_ENV = $Env:DEV_ENV.TrimEnd(';')
 #? Pass arguments to Just
-if ($Args) {
+if ($RemainingArgs) {
     $Verbose = ($VerbosePreference -ne 'SilentlyContinue')
     $Debug = $Env:CI -or ($DebugPreference -ne 'SilentlyContinue')
-    $Env:JUST_COLOR = $Env:CI ? 'always' : $null
     $Env:DEV_VERBOSE = $Verbose ? 'true' : $null
     $Env:DEV_DEBUG = $Debug ? 'true' : $null
     $Env:JUST_EXPLAIN = ($Verbose -or $Debug) ? 'true' : $null
     $Env:JUST_QUIET = $Debug ?  $null : 'true'
-    uvx --from "rust-just@$Env:JUST_VERSION" just @Args
+    uvx --from "rust-just@$Env:JUST_VERSION" just @RemainingArgs
 }
 else {
     $Env:DEV_VERBOSE = $Env:DEV_DEBUG = $Env:JUST_EXPLAIN = 'true'

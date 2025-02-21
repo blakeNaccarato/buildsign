@@ -1,10 +1,10 @@
 from cappa.base import invoke
 
-from buildsign.models import CLI
+from buildsign.models import Buildsign
 
 
 def main():
-    invoke(CLI)
+    invoke(Buildsign)
 
 
 if __name__ == "__main__":

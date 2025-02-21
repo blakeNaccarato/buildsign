@@ -5,6 +5,11 @@ Param([Parameter(ValueFromRemainingArguments)][string[]]$RemainingArgs)
 
 #? Source common shell config
 . ./scripts/pre.ps1
+#? Set verbosity and CI-specific environment variables
+$Verbose = $Env:CI -or ($DebugPreference -ne 'SilentlyContinue') -or ($VerbosePreference -ne 'SilentlyContinue')
+$Env:DEV_VERBOSE = $Verbose ? 'true' : $null
+$Env:JUST_VERBOSE = $Verbose ? '1' : $null
+$Env:JUST_NO_DOTENV = $Env:JUST_TIMESTAMP = $Env:CI ? 'true' : $null
 #? Set environment variables
 $Env:DEV_ENV = ''
 @{
@@ -16,6 +21,7 @@ $Env:DEV_ENV = ''
     JUPYTER_PLATFORM_DIRS          = '1'
     JUST_COLOR                     = $Env:CI ? 'always' : $null
     JUST_COMMAND_COLOR             = 'purple'
+    JUST_EXPLAIN                   = 'true'
     JUST_LIST_SUBMODULES           = 'true'
     JUST_UNSORTED                  = 'true'
     JUST_VERSION                   = '1.39.0'
@@ -38,17 +44,5 @@ $Env:DEV_ENV = ''
 }
 $Env:DEV_ENV = $Env:DEV_ENV.TrimEnd(';')
 #? Pass arguments to Just
-if ($RemainingArgs) {
-    $Verbose = ($VerbosePreference -ne 'SilentlyContinue')
-    $Debug = $Env:CI -or ($DebugPreference -ne 'SilentlyContinue')
-    $Env:DEV_VERBOSE = $Verbose ? 'true' : $null
-    $Env:DEV_DEBUG = $Debug ? 'true' : $null
-    $Env:JUST_EXPLAIN = ($Verbose -or $Debug) ? 'true' : $null
-    $Env:JUST_QUIET = $Debug ?  $null : 'true'
-    uvx --from "rust-just@$Env:JUST_VERSION" just @RemainingArgs
-}
-else {
-    $Env:DEV_VERBOSE = $Env:DEV_DEBUG = $Env:JUST_EXPLAIN = 'true'
-    $Env:JUST_QUIET = $null
-    uvx --from "rust-just@$Env:JUST_VERSION" just list
-}
+if ($RemainingArgs) { uvx --from "rust-just@$Env:JUST_VERSION" just @RemainingArgs }
+else { uvx --from "rust-just@$Env:JUST_VERSION" just list }

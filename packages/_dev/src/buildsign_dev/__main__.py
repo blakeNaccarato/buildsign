@@ -27,7 +27,7 @@ class ElevatePyrightWarnings:
 
 
 @dataclass
-class CLI:
+class BuildsignDev:
     """Dev tools."""
 
     commands: Subcommands[
@@ -37,7 +37,7 @@ class CLI:
 
 def main():
     """CLI entry-point."""
-    invoke(CLI)
+    invoke(BuildsignDev)
 
 
 if __name__ == "__main__":

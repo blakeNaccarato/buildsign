@@ -94,7 +94,7 @@ class Sign:
 
 
 @dataclass
-class CLI:
+class Buildsign:
     """CLI."""
 
     command: Subcommands[GetPyApp | Build | Compile | ChangeIcon | Sign]

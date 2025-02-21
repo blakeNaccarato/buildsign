@@ -46,49 +46,17 @@ run *args="Write-Host 'No command given' -ForeGroundColor Yellow": uv-update uv-
 alias r := run
 
 # 👥 Run recipe as a contributor.
-[script, group('⛰️ Environments')]
-@con *args: uv-update con-pre-commit-hooks uv-sync
-  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
-  {{script_pre}}
-  {{'#?'+BLUE+sp+'Write environment variables to VSCode contributor environment'+NORMAL}}
-  $DevEnvJson = ''
-  $Env:DEV_ENV -Split ';' | Select-String -Pattern '([^=]+)=([^=]+)' | ForEach-Object {
-    $K, $V = $_.Matches.Groups[1].Value, $_.Matches.Groups[2].Value
-    $DevEnvJson += "`n    `"$K`": `"$V`","
-  }
-  $DevEnvJson = "{$($DevEnvJson.TrimEnd(','))`n  }"
-  $Settings = '.vscode/settings.json'
-  $SettingsContent = Get-Content $Settings -Raw
-  foreach ($Plat in ('linux', 'osx', 'windows')) {
-    $Pat = "(?m)`"terminal\.integrated\.env\.$Plat`"\s*:\s*\{[^}]*\}"
-    $Repl = "`"terminal.integrated.env.$Plat`": $DevEnvJson"
-    $SettingsContent = $SettingsContent -Replace $Pat, $Repl
-  }
-  Set-Content $Settings $SettingsContent -NoNewline
-  {{ if args==empty { 'return' } else { '#?'+BLUE+sp+'Run recipe'+NORMAL } }}
-  {{ if args==empty { empty } else { _just + sp + args } }}
+[group('⛰️ Environments')]
+con *args: uv-update con-pre-commit-hooks uv-sync
+  {{pre}} Sync-ContribEnv
+  {{ if args==empty { empty } else { pre + _just + sp + args } }}
 alias c := con
 
 # 🤖 Run recipes in CI.
-[script, group('⛰️ Environments')]
-@ci *args: uv-sync
-  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
-  {{script_pre}}
-  {{'#?'+BLUE+sp+'Add `.venv` tools to CI path. Needed for some GitHub Actions like pyright.'+NORMAL}}
-  $GitHubPath = $Env:GITHUB_PATH ? $Env:GITHUB_PATH : '.dummy-ci-path-file'
-  if (!(Test-Path $GitHubPath)) { New-Item $GitHubPath }
-  if (!(Get-Content $GitHubPath | Select-String -Pattern ".venv")) {
-    Add-Content $GitHubPath (".venv/bin", ".venv/scripts")
-  }
-  {{'#?'+BLUE+sp+'Write environment variables to CI environment file'+NORMAL}}
-  $EnvFile = $Env:GITHUB_ENV ? $Env:GITHUB_ENV : '.dummy-ci-env-file'
-  if (!(Test-Path $EnvFile)) { New-Item $EnvFile }
-  if (!(Get-Content $EnvFile | Select-String -Pattern 'DEV_ENV_SET')) {
-    $Env:DEV_ENV -Split ';' | Add-Content $EnvFile
-  }
-  {{'#?'+BLUE+sp+'Elevate Pyright warnings to errors in CI'+NORMAL}}
-  {{_dev}} elevate-pyright-warnings
-  {{ if args==empty { 'return' } else { '#?'+BLUE+sp+'Run recipe'+NORMAL } }}
+[group('⛰️ Environments')]
+ci *args: uv-sync
+  {{pre}} Sync-CiEnv
+  {{pre}} {{_dev}} elevate-pyright-warnings
   {{ if args==empty { empty } else { _just + sp + args } }}
 
 # 📦 Run recipes in a devcontainer.
@@ -260,30 +228,24 @@ con-git-submodules:
   {{pre}} git submodule update --init --merge
 
 # 👥 Install pre-commit hooks.
-[script, group('👥 Contributor environment setup')]
-@con-pre-commit-hooks:
-  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
-  {{script_pre}}
-  {{'#?'+BLUE+sp+'Install hooks if missing'+NORMAL}}
-  if (
-    ({{quote(hooks)}} -Split {{quote(sp)}} |
-      ForEach-Object { ".git/hooks/$_" } |
-      Test-Path
-    ) -Contains $False
-  ) {
-    {{_uvr}} pre-commit install --install-hooks | Out-Null
-    {{ quote(GREEN + 'Pre-commit hooks installed.' + NORMAL) }}
+[group('👥 Contributor environment setup')]
+con-pre-commit-hooks:
+  {{pre}} if ( \
+    ({{quote(hooks)}} -Split {{quote(sp)}} | \
+      ForEach-Object { ".git/hooks/$_" } | \
+      Test-Path \
+    ) -Contains $False \
+  ) { \
+    {{_uvr}} pre-commit install --install-hooks | Out-Null \
+    {{ quote(GREEN + 'Pre-commit hooks installed.' + NORMAL) }} \
   }
 hooks :=\
   'pre-commit'
 
 # 👥 Normalize line endings.
-[script, group('👥 Contributor environment setup')]
-@con-norm-line-endings:
-  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
-  {{script_pre}}
-  {{'#?'+BLUE+sp+'Normalize line endings'+NORMAL}}
-  try { {{_uvr}} pre-commit run mixed-line-ending --all-files | Out-Null }
+[group('👥 Contributor environment setup')]
+con-norm-line-endings:
+  {{pre}} try { {{_uvr}} pre-commit run mixed-line-ending --all-files | Out-Null } \
   catch [System.Management.Automation.NativeCommandExitException] {}
 
 # 👥 Run dev task.

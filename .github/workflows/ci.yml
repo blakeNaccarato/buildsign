@@ -110,11 +110,11 @@ jobs:
           version: "0.5.29"
           enable-cache: true
       # ! https://github.com/pytest-dev/pytest-cov/issues/479#issuecomment-1247444988
-      - if: startsWith(matrix.runner, 'ubuntu') && matrix.python == '3.11'
+      - if: startsWith(matrix.runner, 'ubuntu') && matrix.python == '3.12'
         run: "./j.ps1 ci pytest --cov --cov-config=pyproject.toml --cov-report=xml"
-      - if: startsWith(matrix.runner, 'ubuntu') && matrix.python == '3.11'
+      - if: startsWith(matrix.runner, 'ubuntu') && matrix.python == '3.12'
         uses: "codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673" # v4.5.0
         env:
           CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
-      - if: (!(startsWith(matrix.runner, 'ubuntu') && matrix.python == '3.11'))
+      - if: (!(startsWith(matrix.runner, 'ubuntu') && matrix.python == '3.12'))
         run: "./j.ps1 'python_version=${{ matrix.python }}' ci pytest"

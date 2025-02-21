@@ -4,4 +4,4 @@ $Env:JUST_COMMAND_COLOR = 'purple'
 $Env:JUST_EXPLAIN = 'true'
 $Env:UV_PREVIEW = '1'
 $Env:UVX_JUST = "rust-just@$JustVersion"
-uvx --from "rust-just@$JustVersion" just @Args
+uvx --from $Env:UVX_JUST just @Args

@@ -65,7 +65,7 @@ alias r := run
     $SettingsContent = $SettingsContent -Replace $Pat, $Repl
   }
   Set-Content $Settings $SettingsContent -NoNewline
-  {{'#?'+BLUE+sp+'Run recipe'+NORMAL}}
+  {{ if args==empty { 'return' } else { '#?'+BLUE+sp+'Run recipe'+NORMAL } }}
   {{ if args==empty { empty } else { _just + sp + args } }}
 alias c := con
 
@@ -77,7 +77,7 @@ alias c := con
   {{'#?'+BLUE+sp+'Add `.venv` tools to CI path. Needed for some GitHub Actions like pyright.'+NORMAL}}
   $GitHubPath = $Env:GITHUB_PATH ? $Env:GITHUB_PATH : '.dummy-ci-path-file'
   if (!(Test-Path $GitHubPath)) { New-Item $GitHubPath }
-  if ( !(Get-Content $GitHubPath | Select-String -Pattern ".venv") ) {
+  if (!(Get-Content $GitHubPath | Select-String -Pattern ".venv")) {
     Add-Content $GitHubPath (".venv/bin", ".venv/scripts")
   }
   {{'#?'+BLUE+sp+'Write environment variables to CI environment file'+NORMAL}}
@@ -88,7 +88,7 @@ alias c := con
   }
   {{'#?'+BLUE+sp+'Elevate Pyright warnings to errors in CI'+NORMAL}}
   {{_dev}} elevate-pyright-warnings
-  {{'#?'+BLUE+sp+'Run recipe'+NORMAL}}
+  {{ if args==empty { 'return' } else { '#?'+BLUE+sp+'Run recipe'+NORMAL } }}
   {{ if args==empty { empty } else { _just + sp + args } }}
 
 # 📦 Run recipes in a devcontainer.
@@ -103,7 +103,7 @@ alias c := con
   foreach ($Dir in $SafeDirs) {
     if (!($SafeDirs -contains $Dir)) { git config --global --add safe.directory $Dir }
   }
-  {{'#?'+BLUE+sp+'Run recipe'+NORMAL}}
+  {{ if args==empty { 'return' } else { '#?'+BLUE+sp+'Run recipe'+NORMAL } }}
   {{ if args==empty { empty } else { _just + sp + args } }}
 alias dc := devcontainer
 

@@ -158,7 +158,7 @@ tool-docs-preview:
 # 📖 docs
 [group('⚙️  Tools')]
 tool-docs-build:
-  {{pre}} {{_uvr}} -EaT 'docs' '_site'
+  {{pre}} {{_uvr}} sphinx-build 'docs' '_site'
 
 #* 📦 Packaging
 

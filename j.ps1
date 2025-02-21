@@ -9,7 +9,6 @@ Param([Parameter(ValueFromRemainingArguments)][string[]]$RemainingArgs)
 $Verbose = $Env:CI -or ($DebugPreference -ne 'SilentlyContinue') -or ($VerbosePreference -ne 'SilentlyContinue')
 $Env:DEV_VERBOSE = $Verbose ? 'true' : $null
 $Env:JUST_VERBOSE = $Verbose ? '1' : $null
-$Env:JUST_NO_DOTENV = $Env:JUST_TIMESTAMP = $Env:CI ? 'true' : $null
 #? Set environment variables
 $Env:DEV_ENV = ''
 @{
@@ -23,6 +22,8 @@ $Env:DEV_ENV = ''
     JUST_COMMAND_COLOR             = 'purple'
     JUST_EXPLAIN                   = 'true'
     JUST_LIST_SUBMODULES           = 'true'
+    JUST_NO_DOTENV                 = $Env:CI ? 'true' : $null
+    JUST_TIMESTAMP                 = $Env:CI ? 'true' : $null
     JUST_UNSORTED                  = 'true'
     JUST_VERSION                   = '1.39.0'
     PYAPP_VERSION                  = '0.26.0'

@@ -5,6 +5,7 @@ build-backend = "uv"
 [project]
 name = "buildsign-dev"
 version = "0.0.0"
+requires-python = ">=3.12"
 dependencies = [
   "cappa>=0.26.4",
   "dulwich>=0.22.1",

@@ -117,4 +117,4 @@ jobs:
         env:
           CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
       - if: (!(startsWith(matrix.runner, 'ubuntu') && matrix.python == '3.11'))
-        run: "./j.ps1 ci 'python_version=${{ matrix.python }}' pytest"
+        run: "./j.ps1 'python_version=${{ matrix.python }}' ci pytest"

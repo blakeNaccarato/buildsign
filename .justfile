@@ -233,10 +233,10 @@ alias dev := contrib-dev
 @contrib-sync-environment-variables:
   {{pre}}
   #? Sync `.env` and set environment variables from `pyproject.toml`
-  $EnvFile = '.env'
+  $EnvFile = $Env:GITHUB_ENV ? $Env:GITHUB_ENV : "$PWD/.env"
   if (!(Test-Path $EnvFile)) { New-Item $EnvFile }
   $EnvVars = {{_contrib_dev}} sync-environment-variables
-  $EnvVars | Set-Content ($Env:GITHUB_ENV ? $Env:GITHUB_ENV : $EnvFile)
+  $EnvVars | Set-Content $EnvFile
   $EnvVars | Select-String -Pattern '^(.+?)=(.+)$' | ForEach-Object {
     $K, $V = $_.Matches.Groups[1].Value, $_.Matches.Groups[2].Value
     Set-Item "Env:$K" $V

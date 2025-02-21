@@ -22,6 +22,10 @@ sp :=\
 dquote :=\
   '"'
 
+#* Messages
+_na :=\
+  'not applicable for this OS.'
+
 #* Used to represent a null result where Just would otherwise mishandle a ''
 null :=\
   RED+'$null'+NORMAL

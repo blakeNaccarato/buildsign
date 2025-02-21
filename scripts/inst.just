@@ -19,11 +19,9 @@ pre :=\
   if os_family()=='windows' { pwsh_pre } else { empty } \
   || 'set -o errexit -o nounset -o pipefail -o xtrace;'
 
-#* Variables to wrap messages to stylize using Just's shell escape sequences
+#* Messages
 _installed :=\
   'already installed.'
-_na :=\
-  'not applicable for this OS.'
 
 #* Installers
 win_inst :=\

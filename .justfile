@@ -90,6 +90,11 @@ alias pys := py-script
 py-gui-script script *args:
   {{pre}} {{_uvr}} '--gui-script' {{quote(script)}} {{args}}
 alias pyg := py-gui-script
+# ❌ uv run --gui-script ...
+[linux, macos, group('❌ N/A for this OS')]
+py-gui-script:
+  @{{quote(GREEN+_wt_name+sp+_na+NORMAL)}}
+
 
 # 📦 uv run --module ...
 [group('🐍 Python')]

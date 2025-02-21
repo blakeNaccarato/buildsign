@@ -93,7 +93,7 @@ alias pyg := py-gui-script
 # ❌ uv run --gui-script ...
 [linux, macos, group('❌ N/A for this OS')]
 py-gui-script:
-  @{{quote(GREEN+_wt_name+sp+_na+NORMAL)}}
+  @{{quote(GREEN+'GUI scripts'+sp+_na+NORMAL)}}
 
 
 # 📦 uv run --module ...

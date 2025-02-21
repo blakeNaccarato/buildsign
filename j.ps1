@@ -40,6 +40,7 @@ $Env:DEV_ENV = $Env:DEV_ENV.TrimEnd(';')
 if ($Args) {
     $Verbose = ($VerbosePreference -ne 'SilentlyContinue')
     $Debug = $Env:CI -or ($DebugPreference -ne 'SilentlyContinue')
+    $Env:JUST_COLOR = $Env:CI ? 'always' : $null
     $Env:DEV_VERBOSE = $Verbose ? 'true' : $null
     $Env:DEV_DEBUG = $Debug ? 'true' : $null
     $Env:JUST_EXPLAIN = ($Verbose -or $Debug) ? 'true' : $null

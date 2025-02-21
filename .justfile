@@ -137,7 +137,6 @@ alias pyg := py-gui-script
 py-gui-script:
   @{{quote(GREEN+'GUI scripts'+sp+_na+NORMAL)}}
 
-
 # 📦 uv run --module ...
 [group('🐍 Python')]
 py-module module *args:

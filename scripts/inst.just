@@ -8,7 +8,7 @@ import 'common.just'
 
 #* Shells
 set windows-shell :=\
-  ['pwsh', '-NonInteractive', '-NoProfile', '-Command']
+  ['pwsh', '-NonInteractive', '-NoProfile', '-CommandWithArgs']
 set shell :=\
   ['bash', '--noprofile', '--norc', '--posix', '-c']
 set script-interpreter :=\
@@ -16,7 +16,7 @@ set script-interpreter :=\
 
 #* Reusable shell preamble
 pre :=\
-  if os_family()=='windows' { pwsh_pre } else { empty } \
+  if os_family()=='windows' { pwsh_pre + ';' } else { empty } \
   || 'set -o errexit -o nounset -o pipefail -o xtrace;'
 
 #* Messages
@@ -69,6 +69,7 @@ sudo :=\
 all: code git gh pwsh wt
 
 # 🌐 Install cross-platform PowerShell, the shell used for all non-install recipes.
+[group('🌐 Install')]
 pwsh:
   @{{ if pwsh_found==true { _pwsh_found_msg } else { empty } }}
   {{ if pwsh_found==false { inst_pwsh } else { empty } }}

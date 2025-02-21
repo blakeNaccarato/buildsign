@@ -2,6 +2,7 @@
 
 from base64 import b64encode
 from json import dumps
+from os import environ
 from pathlib import Path
 from re import finditer, sub
 from shlex import join, split
@@ -71,9 +72,9 @@ def elevate_pyright_warnings():
     for k, v in pyright.items():
         if (rule := k).startswith("report") and (_level := v) == "warning":
             pyright[rule] = "error"
-    Path("pyrightconfig.json").write_text(
-        encoding="utf-8", data=dumps(pyright, indent=2)
-    )
+    Path(
+        "pyrightconfig.json" if environ.get("CI") else ".dummy-ci-pyrightconfig.json"
+    ).write_text(encoding="utf-8", data=dumps(pyright, indent=2))
 
 
 def encode_powershell_script(script: str) -> bytes:

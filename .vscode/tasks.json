@@ -36,10 +36,10 @@
       "options": ["build", "release"]
     },
     {
-      "id": "mach",
+      "id": "setup",
       "type": "pickString",
       "description": "Machine setup recipe to run",
-      "options": ["scripts", "git-recs", "gh"]
+      "options": ["scripts", "git", "git-recs", "gh"]
     },
     {
       "id": "name",
@@ -57,44 +57,44 @@
       "label": "Contributor environment setup",
       "detail": "Set up the contributor environment",
       "icon": { "color": "terminal.ansiYellow", "id": "star-full" },
-      "command": "./j.ps1 contrib-setup",
+      "command": "./j.ps1 -Debug contrib-setup",
       "runOptions": { "runOn": "folderOpen" }
     },
     {
       "label": "Run",
       "detail": "Run a shell command",
       "icon": { "color": "terminal.ansiCyan", "id": "run" },
-      "command": "./j.ps1 run ${input:args}"
+      "command": "./j.ps1 -Debug run ${input:args}"
     },
     {
       "label": "uv",
       "detail": "Run uv",
       "icon": { "color": "terminal.ansiMagenta", "id": "star-full" },
-      "command": "./j.ps1 uv ${input:args}"
+      "command": "./j.ps1 -Debug uv ${input:args}"
     },
     {
       "label": "uv run",
       "detail": "Run something with uv",
       "icon": { "color": "terminal.ansiMagenta", "id": "run" },
-      "command": "./j.ps1 uv-run ${input:args}"
+      "command": "./j.ps1 -Debug uv-run ${input:args}"
     },
     {
       "label": "uv sync (with args)",
       "detail": "Sync the contributor environment",
       "icon": { "color": "terminal.ansiMagenta", "id": "sync" },
-      "command": "./j.ps1 uv-sync ${input:args}"
+      "command": "./j.ps1 -Debug uv-sync ${input:args}"
     },
     {
       "label": "Python",
       "detail": "Run a Python recipe",
       "icon": { "color": "terminal.ansiYellow", "id": "snake" },
-      "command": "./j.ps1 py-${input:python} ${input:args}"
+      "command": "./j.ps1 -Debug py-${input:python} ${input:args}"
     },
     {
       "label": "Packaging",
       "detail": "Run a Packaging recipe",
       "icon": { "color": "terminal.ansiRed", "id": "package" },
-      "command": "./j.ps1 pkg-${input:python} ${input:args}"
+      "command": "./j.ps1 -Debug pkg-${input:python} ${input:args}"
     },
     {
       "label": "Build",
@@ -104,12 +104,12 @@
         "kind": "build",
         "isDefault": true
       },
-      "command": "./j.ps1 pkg-build"
+      "command": "./j.ps1 -Debug pkg-build"
     },
     {
       "label": "Test",
       "detail": "Run the default test recipe",
-      "command": "./j.ps1 tool-pytest",
+      "command": "./j.ps1 -Debug tool-pytest",
       "group": {
         "kind": "test",
         "isDefault": true
@@ -119,20 +119,20 @@
     {
       "label": "Pre-commit (all-files)",
       "detail": "Run pre-commit on all files",
-      "command": "./j.ps1 tool-pre-commit --all-files",
+      "command": "./j.ps1 -Debug tool-pre-commit --all-files",
       "icon": { "id": "gear" }
     },
     {
       "label": "Machine setup",
       "detail": "Run machine setup recipes",
       "icon": { "id": "device-desktop" },
-      "command": "./j.ps1 mach-${input:mach} ${input:args}"
+      "command": "./j.ps1 -Debug setup-${input:setup} ${input:args}"
     },
     {
       "label": "Machine setup: Git",
       "detail": "Set up Git",
       "icon": { "id": "device-desktop" },
-      "command": "./j.ps1 mach-git ${input:name} ${input:email}"
+      "command": "./j.ps1 -Debug setup-git ${input:name} ${input:email}"
     }
   ]
 }

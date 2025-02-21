@@ -25,14 +25,14 @@ catch [System.Management.Automation.NativeCommandExitException] {}
 # ? Modify GitHub repo if there were not already commits in this repo
 if ($Fresh) {
     if ( !(git remote) ) {
-        git remote add origin 'https://github.com/softboiler/boilercv.git'
+        git remote add origin 'https://github.com/blakeNaccarato/buildsign.git'
         git branch --move --force main
     }
     gh repo edit --description (
         Get-Content '.copier-answers.yml' |
             Find-Pattern '^project_description:\s(.+)$'
     )
-    gh repo edit --homepage 'https://softboiler.github.io/boilercv/'
+    gh repo edit --homepage 'https://blakeNaccarato.github.io/blakeNaccarato/buildsign/'
 }
 
 git push --set-upstream origin main

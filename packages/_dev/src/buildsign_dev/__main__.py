@@ -5,8 +5,6 @@ from dataclasses import dataclass
 from cappa.base import command, invoke
 from cappa.subcommand import Subcommands
 
-from buildsign_dev import SyncEnvironmentVariables
-
 
 @command(invoke="buildsign_dev.tools.add_change")
 class AddChange:
@@ -29,21 +27,17 @@ class ElevatePyrightWarnings:
 
 
 @dataclass
-class BoilercvDev:
+class CLI:
     """Dev tools."""
 
     commands: Subcommands[
-        SyncEnvironmentVariables
-        | AddChange
-        | GetActions
-        | SyncLocalDevConfigs
-        | ElevatePyrightWarnings
+        AddChange | GetActions | SyncLocalDevConfigs | ElevatePyrightWarnings
     ]
 
 
 def main():
     """CLI entry-point."""
-    invoke(BoilercvDev)
+    invoke(CLI)
 
 
 if __name__ == "__main__":

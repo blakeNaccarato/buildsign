@@ -16,7 +16,7 @@ repos:
         name: "fawltydeps-dev"
         pass_filenames: false
         language: "system"
-        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 fawltydeps --config-file packages/_dev/pyproject.toml'"
+        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 -Debug fawltydeps --config-file packages/_dev/pyproject.toml'"
         files: |
           (?x)^(
             packages/_dev/.*
@@ -25,7 +25,7 @@ repos:
         name: "fawltydeps-buildsign"
         pass_filenames: false
         language: "system"
-        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 fawltydeps --config-file packages/buildsign/pyproject.toml'"
+        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 -Debug fawltydeps --config-file packages/buildsign/pyproject.toml'"
         files: |
           (?x)^(
             packages/buildsign/.*
@@ -34,7 +34,7 @@ repos:
         name: "fawltydeps-hello"
         pass_filenames: false
         language: "system"
-        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 fawltydeps --config-file packages/hello/pyproject.toml'"
+        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 -Debug fawltydeps --config-file packages/hello/pyproject.toml'"
         files: |
           (?x)^(
             packages/hello/.*

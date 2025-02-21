@@ -18,8 +18,8 @@ dependencies = ["cappa>=0.26.4", "httpx>=0.28.1", "platformdirs>=4.3.6"]
 [project.urls]
 Changes = "https://blakeNaccarato.github.io/buildsign/changelog.html"
 Docs = "https://blakeNaccarato.github.io/buildsign"
-Home = "https://github.com/softboiler/buildsign"
-Tracker = "https://github.com/softboiler/buildsign/issues"
+Home = "https://github.com/blakeNaccarato/buildsign"
+Tracker = "https://github.com/blakeNaccarato/buildsign/issues"
 
 [tool.fawltydeps]
 deps = ["packages/buildsign/pyproject.toml"]

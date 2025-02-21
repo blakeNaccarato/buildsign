@@ -1,5 +1,5 @@
 #* Reusable shell preamble
-pwsh_pre := '.' + sp + 'scripts/pre.ps1;'
+pwsh_pre := '.' + sp + 'scripts/pre.ps1'
 
 #* File extensions
 sh_ext :=\
@@ -38,10 +38,8 @@ false :=\
 
 #* Just
 _just :=\
-  'uvx --from' + sp + quote(env('UVX_JUST')) + sp + 'just'
-_just_quiet :=\
-  _just + sp + '--quiet'
-_just_no_explain :=\
-  "$Env:JUST_EXPLAIN='false';" + sp + _just
-_just_silent :=\
-  _just_no_explain + sp + '--quiet'
+  'uvx --from' + sp + quote(\
+    'rust-just' + \
+    if env('JUST_VERSION')==empty { empty } else { '@' + env('JUST_VERSION') } \
+  ) \
+  + sp + 'just' \

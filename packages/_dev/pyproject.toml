@@ -6,13 +6,7 @@ build-backend = "uv"
 name = "buildsign-dev"
 version = "0.0.0"
 requires-python = ">=3.12"
-dependencies = [
-  "cappa>=0.26.4",
-  "dulwich>=0.22.1",
-  "pydantic-settings>=2.5.2",
-  "pydantic>=2.9.1",
-  "python-dotenv>=1.0.1",
-]
+dependencies = ["cappa>=0.26.4", "dulwich>=0.22.1"]
 [project.scripts]
 "buildsign-dev" = "buildsign_dev.__main__:main"
 

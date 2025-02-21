@@ -1,3 +1,6 @@
+# Dummy files for testing recipes
+.dummy*
+
 # PyApp
 source.zip
 pyapp/*

@@ -6,7 +6,7 @@ An example of signed executable Python binaries using PyApp with caching and Azu
 
 ```Shell
 # On Windows.
-powershell -ExecutionPolicy ByPass -Command 'irm https://astral.sh/uv/0.5.29/install.ps1 | iex'
+powershell -ExecutionPolicy 'ByPass' -Command 'irm https://astral.sh/uv/0.5.29/install.ps1 | iex'
 uvx --from 'rust-just@1.39.0' just --explain inst all
 ```
 

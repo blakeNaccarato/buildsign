@@ -1,3 +1,11 @@
+#* Project
+name :=\
+  'buildsign'
+python_version :=\
+  env('PYTHON_VERSION', empty)
+uv_version :=\
+  env('UV_VERSION', empty)
+
 #* Settings
 set dotenv-load
 set unstable
@@ -11,12 +19,14 @@ mod inst 'scripts/inst.just'
 
 #* Shells
 set shell :=\
-  ['pwsh', '-NonInteractive', '-NoProfile', '-Command']
+  ['pwsh', '-NonInteractive', '-NoProfile', '-CommandWithArgs']
 set script-interpreter :=\
   ['pwsh', '-NonInteractive', '-NoProfile']
 
 #* Reusable shell preambles
 pre :=\
+  pwsh_pre + ';'
+script_pre :=\
   pwsh_pre
 
 #* ♾️  Self
@@ -25,24 +35,86 @@ pre :=\
 # 📃 List recipes.
 [group('♾️  Self')]
 list:
-  {{pre}} {{_just}} --list --unsorted --list-submodules
+  {{pre}} {{_just}} --list
 
-#* 🏃 Run
+# #* ⛰️ Environments
 
-# 🏃 Run any shell command.
-[group('🏃 run')]
-run *args:
-  {{pre}} {{args}}
+# 🏃 Run shell command with UV synced.
+[group('⛰️ Environments')]
+run *args="Write-Host 'No command given' -ForeGroundColor Yellow": uv-update uv-sync
+  {{ pre + sp + args }}
 alias r := run
+
+# 👥 Run recipe as a contributor.
+[script, group('⛰️ Environments')]
+@con *args: uv-update con-pre-commit-hooks uv-sync
+  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
+  {{script_pre}}
+  {{'#?'+BLUE+sp+'Write environment variables to VSCode contributor environment'+NORMAL}}
+  $DevEnvJson = ''
+  $Env:DEV_ENV -Split ';' | Select-String -Pattern '([^=]+)=([^=]+)' | ForEach-Object {
+    $K, $V = $_.Matches.Groups[1].Value, $_.Matches.Groups[2].Value
+    $DevEnvJson += "`n    `"$K`": `"$V`","
+  }
+  $DevEnvJson = "{$($DevEnvJson.TrimEnd(','))`n  }"
+  $Settings = '.vscode/settings.json'
+  $SettingsContent = Get-Content $Settings -Raw
+  foreach ($Plat in ('linux', 'osx', 'windows')) {
+    $Pat = "(?m)`"terminal\.integrated\.env\.$Plat`"\s*:\s*\{[^}]*\}"
+    $Repl = "`"terminal.integrated.env.$Plat`": $DevEnvJson"
+    $SettingsContent = $SettingsContent -Replace $Pat, $Repl
+  }
+  Set-Content $Settings $SettingsContent -NoNewline
+  {{'#?'+BLUE+sp+'Run recipe'+NORMAL}}
+  {{ if args==empty { empty } else { _just + sp + args } }}
+alias c := con
+
+# 🤖 Run recipes in CI.
+[script, group('⛰️ Environments')]
+@ci *args: uv-sync
+  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
+  {{script_pre}}
+  {{'#?'+BLUE+sp+'Add `.venv` tools to CI path. Needed for some GitHub Actions like pyright.'+NORMAL}}
+  $GitHubPath = $Env:GITHUB_PATH ? $Env:GITHUB_PATH : '.dummy-ci-path-file'
+  if (!(Test-Path $GitHubPath)) { New-Item $GitHubPath }
+  if ( !(Get-Content $GitHubPath | Select-String -Pattern ".venv") ) {
+    Add-Content $GitHubPath (".venv/bin", ".venv/scripts")
+  }
+  {{'#?'+BLUE+sp+'Write environment variables to CI environment file'+NORMAL}}
+  $EnvFile = $Env:GITHUB_ENV ? $Env:GITHUB_ENV : '.dummy-ci-env-file'
+  if (!(Test-Path $EnvFile)) { New-Item $EnvFile }
+  if (!(Get-Content $EnvFile | Select-String -Pattern 'DEV_ENV_SET')) {
+    $Env:DEV_ENV -Split ';' | Add-Content $EnvFile
+  }
+  {{'#?'+BLUE+sp+'Elevate Pyright warnings to errors in CI'+NORMAL}}
+  {{_dev}} elevate-pyright-warnings
+  {{'#?'+BLUE+sp+'Run recipe'+NORMAL}}
+  {{ if args==empty { empty } else { _just + sp + args } }}
+
+# 📦 Run recipes in a devcontainer.
+[script, group('⛰️ Environments')]
+@devcontainer *args:
+  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
+  {{script_pre}}
+  {{'#?'+BLUE+sp+'Devcontainers need submodules explicitly marked as safe directories'+NORMAL}}
+  $Repo = Get-ChildItem '/workspaces'
+  $Packages = Get-ChildItem "$Repo/packages"
+  $SafeDirs = @($Repo) + $Packages
+  foreach ($Dir in $SafeDirs) {
+    if (!($SafeDirs -contains $Dir)) { git config --global --add safe.directory $Dir }
+  }
+  {{'#?'+BLUE+sp+'Run recipe'+NORMAL}}
+  {{ if args==empty { empty } else { _just + sp + args } }}
+alias dc := devcontainer
 
 #* 🟣 uv
 
 #? Uv invocations
-python_version :=\
-  env('PYTHON_VERSION', '3.12')
 _uv_options :=\
   '--all-packages' \
-  + sp + '--python' + sp + quote(python_version)
+  + sp + '--python' + ( \
+    if python_version==empty { empty } else { sp + quote(python_version) } \
+  )
 _uv :=\
   'uv'
 _uvr :=\
@@ -64,13 +136,14 @@ alias uvr := uv-run
 # 🌐 Synchronize installed uv version with project uv version.
 [group('🟣 uv')]
 uv-update:
-  uv self update {{env('UV_VERSION')}}
+  uv self update{{ if uv_version==empty { empty } else { sp + quote(uv_version) } }}
 
 # ♻️ uv sync ...
 [group('🟣 uv')]
 uv-sync *args:
   {{pre}} {{_uvs}} {{args}}
 alias uvs := uv-sync
+alias sync := uv-sync
 
 #* 🐍 Python
 
@@ -113,9 +186,8 @@ alias pyc := py-command
 
 # ✔️  pre-commit run ...
 [group('⚙️  Tools')]
-tool-pre-commit *args:
-  {{pre}} {{_just_silent}} contrib-setup
-  {{pre}} {{_just}} {{_uvr}} pre-commit run --verbose {{args}}
+tool-pre-commit *args: con
+  {{pre}} {{_uvr}} pre-commit run --verbose {{args}}
 alias pre-commit := tool-pre-commit
 alias pc := tool-pre-commit
 
@@ -166,7 +238,7 @@ tool-docs-build:
 # 🛞  Build wheel, compile binary, and sign.
 [group('📦 Packaging')]
 pkg-build *args:
-  {{pre}} {{_uvr}} buildsign {{args}}
+  {{pre}} {{_uvr}} {{name}} {{args}}
 alias build := pkg-build
 
 # ✨ Release new version.
@@ -177,103 +249,65 @@ alias release := pkg-release
 
 #* 👥 Contributor environment setup
 
-_contrib_dev :=\
-  if path_exists('.venv')==true { _uvr + sp + _dev } \
-  else { 'uvx --with-editable' + sp + quote('./packages/_dev') + sp + _dev }
 _dev :=\
-  'buildsign-dev'
-
-# 👥 Set up contributor environment.
-[group('👥 Contributor environment setup')]
-contrib-setup: contrib-sync-environment-variables
-  {{pre}} {{_just}} uv-update
-  {{pre}} {{_just}} \
-    contrib-git-submodules \
-    contrib-norm-line-endings \
-    contrib-pre-commit-hooks \
-    uv-sync
+  _uvr + sp + quote(name + '-dev')
 
 # 👥 Update Git submodules.
 [group('👥 Contributor environment setup')]
-contrib-git-submodules:
+con-git-submodules:
   {{pre}} Get-ChildItem '.git/modules' -Filter 'config.lock' -Recurse -Depth 1 | \
       Remove-Item
   {{pre}} git submodule update --init --merge
 
 # 👥 Install pre-commit hooks.
 [script, group('👥 Contributor environment setup')]
-@contrib-pre-commit-hooks:
-  {{pre}}
+@con-pre-commit-hooks:
+  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
+  {{script_pre}}
+  {{'#?'+BLUE+sp+'Install hooks if missing'+NORMAL}}
   if (
     ({{quote(hooks)}} -Split {{quote(sp)}} |
       ForEach-Object { ".git/hooks/$_" } |
       Test-Path
     ) -Contains $False
-  ) { {{_uvr}} pre-commit install --install-hooks | Out-Null }
-  else { {{quote(GREEN+'Pre-commit hooks already installed.'+NORMAL)}} }
+  ) {
+    {{_uvr}} pre-commit install --install-hooks | Out-Null
+    {{ quote(GREEN + 'Pre-commit hooks installed.' + NORMAL) }}
+  }
 hooks :=\
   'pre-commit'
 
 # 👥 Normalize line endings.
 [script, group('👥 Contributor environment setup')]
-@contrib-norm-line-endings:
-  {{pre}}
+@con-norm-line-endings:
+  {{'#?'+BLUE+sp+'Source common shell config'+NORMAL}}
+  {{script_pre}}
+  {{'#?'+BLUE+sp+'Normalize line endings'+NORMAL}}
   try { {{_uvr}} pre-commit run mixed-line-ending --all-files | Out-Null }
   catch [System.Management.Automation.NativeCommandExitException] {}
 
 # 👥 Run dev task.
 [group('👥 Contributor environment setup')]
-contrib-dev *args:
-  {{pre}} _contrib_dev {{args}}
-alias dev := contrib-dev
-
-# 👥 Sync environment variables.
-[script, group('👥 Contributor environment setup')]
-@contrib-sync-environment-variables:
-  {{pre}}
-  #? Sync `.env` and set environment variables from `pyproject.toml`
-  $EnvFile = $Env:GITHUB_ENV ? $Env:GITHUB_ENV : "$PWD/.env"
-  if (!(Test-Path $EnvFile)) { New-Item $EnvFile }
-  $EnvVars = {{_contrib_dev}} sync-environment-variables
-  $EnvVars | Set-Content $EnvFile
-  $EnvVars | Select-String -Pattern '^(.+?)=(.+)$' | ForEach-Object {
-    $K, $V = $_.Matches.Groups[1].Value, $_.Matches.Groups[2].Value
-    Set-Item "Env:$K" $V
-  }
-  #? Sync `.vscode/settings.json` with environment variables
-  $ProjEnvJson = '{'
-  ({{_contrib_dev}} sync-environment-variables --config-only) |
-    Select-String -Pattern '^(.+?)=(.+)$' |
-    ForEach-Object {
-      $K, $V = $_.Matches.Groups[1].Value, $_.Matches.Groups[2].Value
-      $ProjEnvJson += "`n    `"$K`": `"$V`","
-    }
-  $ProjEnvJson = "$($ProjEnvJson.TrimEnd(','))`n  }"
-  $Settings = '.vscode/settings.json'
-  $SettingsContent = Get-Content $Settings -Raw
-  foreach ($Plat in ('linux', 'osx', 'windows')) {
-    $Pat = "(?m)`"terminal\.integrated\.env\.$Plat`"\s*:\s*\{[^}]*\}"
-    $Repl = "`"terminal.integrated.env.$Plat`": $ProjEnvJson"
-    $SettingsContent = $SettingsContent -Replace $Pat, $Repl
-  }
-  Set-Content $Settings $SettingsContent -NoNewline
+con-dev *args:
+  {{pre}} {{_dev}} {{args}}
+alias dev := con-dev
 
 #* 💻 Machine setup
 
 # 🔓 Allow running local PowerShell scripts.
 [windows, group('💻 Machine setup')]
-mach-scripts:
+setup-scripts:
   {{pre}} Set-ExecutionPolicy -Scope 'CurrentUser' 'RemoteSigned'
 
 # 👤 Set Git username and email.
 [group('💻 Machine setup')]
-mach-git name email:
-  {{pre}} git config --global user.name {{quote(name)}}
+setup-git username email:
+  {{pre}} git config --global user.name {{quote(username)}}
   {{pre}} git config --global user.email {{quote(email)}}
 
 # 👤 Configure Git as recommended.
 [group('💻 Machine setup')]
-mach-git-recs:
+setup-git-recs:
   {{pre}} git config --global fetch.prune true
   {{pre}} git config --global pull.rebase true
   {{pre}} git config --global push.autoSetupRemote true
@@ -281,24 +315,5 @@ mach-git-recs:
 
 # 🔑 Log in to GitHub API.
 [group('💻 Machine setup')]
-mach-gh:
+setup-gh:
   {{pre}} gh auth login
-
-# 🤖 Set up CI.
-[group('💻 Machine setup')]
-mach-ci: contrib-sync-environment-variables
-  {{pre}} {{_just}} uv-sync
-  {{pre}} Add-Content $Env:GITHUB_PATH ("$PWD/.venv/bin", "$PWD/.venv/scripts")
-  {{_contrib_dev}} elevate-pyright-warnings
-alias ci := mach-ci
-
-# 📦 Set up devcontainer.
-[script, group('💻 Machine setup')]
-mach-devcontainer:
-  {{pre}}
-  $Repo = Get-ChildItem '/workspaces'
-  $Packages = Get-ChildItem "$Repo/packages"
-  $SafeDirs = @($Repo) + $Packages
-  foreach ($Dir in $SafeDirs) {
-    if (!($SafeDirs -contains $Dir)) { git config --global --add safe.directory $Dir }
-  }

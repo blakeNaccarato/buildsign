@@ -229,6 +229,9 @@ skip-magic-trailing-comma = true
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 [tool.ruff.lint.extend-per-file-ignores]
+"types.py" = [
+  "A005", # Allow types modules that shadow a stdlib module
+]
 "tests/**" = [
   "ARG001", # Allow unused arguments
   "S101",   # Allow assert

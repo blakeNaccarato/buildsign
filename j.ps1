@@ -1,2 +1,4 @@
 . ./scripts/pre.ps1
-uvx --from "rust-just@$(Get-Content '.just-version')" just --explain @Args
+$Env:JUST_EXPLAIN = 'true'
+$Env:JUST_COMMAND_COLOR = 'purple'
+uvx --from "rust-just@$(Get-Content '.just-version')" just @Args

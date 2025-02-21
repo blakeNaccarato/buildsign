@@ -232,7 +232,6 @@ _git_name :=\
 # 🌐 Install Snap.
 [script, linux, group('🌐 Install')]
 @snap:
-  {{script}}
   {{check_snap}}
   #? Request sudo up-front
   sudo -v
@@ -259,7 +258,6 @@ _git_name :=\
     #? Perform Fedora-specific snap setup
     sudo systemctl enable --now 'snapd.socket'
     sudo ln -s '/var/lib/snapd/snap' '/snap'
-  {{output}}
 check_snap :=\
   if snap_bin!=null { 'return ' + quote(GREEN+snap_name+sp+_installed+NORMAL) } else { empty }
 wsl_conf_extra :=\

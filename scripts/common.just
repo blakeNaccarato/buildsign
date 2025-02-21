@@ -32,12 +32,12 @@ true :=\
 false :=\
   'false'
 
-#* Styles to delineate scripts and output
-script :=\
-  '#' + sp + CYAN + 'SCRIPT...' + NORMAL
-output :=\
-  '#' + sp + CYAN + 'OUTPUT...' + NORMAL
-
 #* Just
 _just :=\
-  'uvx --from' + sp + quote('rust-just@' + trim(read('.just-version'))) + sp + 'just --explain'
+  'uvx --from' + sp + quote('rust-just@' + trim(read('.just-version'))) + sp + 'just'
+_just_quiet :=\
+  _just + sp + '--quiet'
+_just_no_explain :=\
+  "$Env:JUST_EXPLAIN='false';" + sp + _just
+_just_silent :=\
+  _just_no_explain + sp + '--quiet'

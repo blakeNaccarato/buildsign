@@ -109,12 +109,20 @@ alias pyc := py-command
 
 #* ⚙️ Tools
 
-# ✔️  pre-commit ...
+# ✔️  pre-commit run ...
 [group('⚙️  Tools')]
 tool-pre-commit *args:
-  {{pre}} {{_just}} --quiet contrib-setup
-  {{pre}} {{_just}} uv-run pre-commit run --verbose {{args}}
+  {{pre}} {{_just_silent}} contrib-setup
+  {{pre}} {{_just}} {{_uvr}} pre-commit run --verbose {{args}}
 alias pre-commit := tool-pre-commit
+alias pc := tool-pre-commit
+
+# ✔️  pre-commit run --all-files ...
+[group('⚙️  Tools')]
+tool-pre-commit-all *args:
+  {{pre}} {{_just}} pre-commit --all-files {{args}}
+alias pre-commit-all := tool-pre-commit-all
+alias pca := tool-pre-commit-all
 
 # ✔️  fawltydeps ...
 [group('⚙️  Tools')]
@@ -164,14 +172,13 @@ alias release := pkg-release
 
 # 👥 Set up contributor environment.
 [group('👥 Contributor environment setup')]
-contrib-setup:
-  {{pre}} {{_just}} --quiet \
-    uv-update \
-    contrib-sync-environment-variables \
-    contrib-git-submodules \
-    contrib-norm-line-endings \
-    contrib-pre-commit-hooks
-  {{pre}} {{_just}} --quiet uv-sync
+contrib-setup: \
+  uv-update \
+  contrib-sync-environment-variables \
+  contrib-git-submodules \
+  contrib-norm-line-endings \
+  contrib-pre-commit-hooks
+    {{pre}} {{_just}} uv-sync
 
 # 👥 Update Git submodules.
 [group('👥 Contributor environment setup')]
@@ -183,7 +190,6 @@ contrib-git-submodules:
 # 👥 Install pre-commit hooks.
 [script, group('👥 Contributor environment setup')]
 @contrib-pre-commit-hooks:
-  {{script}}
   {{pre}}
   if (
     ({{quote(hooks)}} -Split {{quote(sp)}} |
@@ -192,20 +198,17 @@ contrib-git-submodules:
     ) -Contains $False
   ) { {{_uvr}} pre-commit install --install-hooks | Out-Null }
   else { {{quote(GREEN+'Pre-commit hooks already installed.'+NORMAL)}} }
-  {{output}}
 hooks :=\
   'pre-commit'
 
 # 👥 Normalize line endings.
 [script, group('👥 Contributor environment setup')]
 @contrib-norm-line-endings:
-  {{script}}
   {{pre}}
-  try { {{_uvr}} pre-commit run mixed-line-ending --all-files }
+  try { {{_uvr}} pre-commit run mixed-line-ending --all-files | Out-Null }
   catch [System.Management.Automation.NativeCommandExitException] {}
-  {{output}}
 
-# 👥 Run dev tasks.
+# 👥 Run dev task.
 [group('👥 Contributor environment setup')]
 contrib-dev *args:
   {{pre}} uvx --from './packages/_dev' buildsign-dev {{args}}
@@ -214,9 +217,8 @@ alias dev := contrib-dev
 # 👥 Sync environment variables.
 [script, group('👥 Contributor environment setup')]
 @contrib-sync-environment-variables:
-  {{script}}
   {{pre}}
-  # ? Sync `.env` and set environment variables from `pyproject.toml`
+  #? Sync `.env` and set environment variables from `pyproject.toml`
   $EnvFile = '.env'
   if (!(Test-Path $EnvFile)) { New-Item $EnvFile }
   $EnvVars = {{_just}} dev sync-environment-variables
@@ -225,7 +227,7 @@ alias dev := contrib-dev
     $K, $V = $_.Matches.Groups[1].Value, $_.Matches.Groups[2].Value
     Set-Item "Env:$K" $V
   }
-  # ? Sync `.vscode/settings.json` with environment variables
+  #? Sync `.vscode/settings.json` with environment variables
   $ProjEnvJson = '{'
   ({{_just}} dev sync-environment-variables --config-only) |
     Select-String -Pattern '^(.+?)=(.+)$' |
@@ -242,7 +244,6 @@ alias dev := contrib-dev
     $SettingsContent = $SettingsContent -Replace $Pat, $Repl
   }
   Set-Content $Settings $SettingsContent -NoNewline
-  {{output}}
 
 #* 💻 Machine setup
 
@@ -280,11 +281,9 @@ mach-ci:
 [script, group('💻 Machine setup')]
 mach-devcontainer:
   {{pre}}
-  {{script}}
   $Repo = Get-ChildItem '/workspaces'
   $Packages = Get-ChildItem "$Repo/packages"
   $SafeDirs = @($Repo) + $Packages
   foreach ($Dir in $SafeDirs) {
     if (!($SafeDirs -contains $Dir)) { git config --global --add safe.directory $Dir }
   }
-  {{output}}

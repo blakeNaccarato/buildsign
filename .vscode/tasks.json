@@ -110,6 +110,12 @@
       "icon": { "color": "terminal.ansiGreen", "id": "beaker" }
     },
     {
+      "label": "Pre-commit (all-files)",
+      "detail": "Run pre-commit on all files",
+      "command": "./j.ps1 tool-pre-commit --all-files",
+      "icon": { "id": "gear" }
+    },
+    {
       "label": "Machine setup",
       "detail": "Run machine setup recipes",
       "icon": { "id": "device-desktop" },

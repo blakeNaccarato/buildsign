@@ -49,6 +49,7 @@ _uvr :=\
   _uv + sp + 'run' + sp + _uv_options
 _uvs :=\
   _uv + sp + 'sync' + sp + _uv_options
+
 # 🟣 uv
 [group('🟣 uv')]
 uv *args:
@@ -184,15 +185,13 @@ _dev :=\
 
 # 👥 Set up contributor environment.
 [group('👥 Contributor environment setup')]
-contrib-setup: \
-  contrib-sync-environment-variables \
-  contrib-pre-commit-hooks
-    {{pre}} {{_just}} uv-update
-    {{pre}} {{_just}} \
-      contrib-git-submodules \
-      contrib-norm-line-endings \
-      contrib-pre-commit-hooks \
-      uv-sync
+contrib-setup: contrib-sync-environment-variables
+  {{pre}} {{_just}} uv-update
+  {{pre}} {{_just}} \
+    contrib-git-submodules \
+    contrib-norm-line-endings \
+    contrib-pre-commit-hooks \
+    uv-sync
 
 # 👥 Update Git submodules.
 [group('👥 Contributor environment setup')]

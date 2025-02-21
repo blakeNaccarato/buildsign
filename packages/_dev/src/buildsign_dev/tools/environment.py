@@ -24,16 +24,12 @@ class Constants(BaseModel):
 
     dev_tool_config: tuple[str, ...] = ("tool", get_module_name(buildsign_dev))
     """Path to `dev` tool configuration in `pyproject.toml`."""
-    pylance_version_source: str = ".pylance-version"
-    """Path to Pylance version file."""
     shell: list[str] = ["pwsh", "-Command"]
     """Shell invocation for running arbitrary commands."""
     uv_run_wrapper: str = "./Invoke-Uv"
     """Wrapper of `uv run` with extra setup."""
     env: Path = Path(environ["GITHUB_ENV"] if environ.get("GITHUB_ENV") else ".env")
     """Environment file path."""
-    pylance_version: str = Path(".pylance-version").read_text(encoding="utf-8").strip()
-    """Pylance version."""
 
 
 const = Constants()
@@ -42,8 +38,6 @@ const = Constants()
 def sync_environment_variables(args: SyncEnvironmentVariables):
     """Sync `.env` with `pyproject.toml`, optionally setting environment variables."""
     config_env = Config().env
-    if const.pylance_version:
-        config_env["PYRIGHT_PYTHON_PYLANCE_VERSION"] = const.pylance_version
     config_env = dict(sorted(config_env.items()))
     if args.config_only:
         return print("\n".join(f"{k}={v}" for k, v in config_env.items()))  # noqa: T201

@@ -20,7 +20,14 @@
       "id": "tool",
       "type": "pickString",
       "description": "Tool recipe to run",
-      "options": ["pre-commit", "pyright", "ruff", "pytest", "docs"]
+      "options": [
+        "pre-commit",
+        "pyright",
+        "ruff",
+        "pytest",
+        "docs-preview",
+        "docs-build"
+      ]
     },
     {
       "id": "packaging",

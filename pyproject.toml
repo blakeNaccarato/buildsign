@@ -25,14 +25,20 @@ hello = { workspace = true }
 members = ["packages/*"]
 
 [tool.buildsign_dev.env]
+BUILDSIGN_VERSION = "0.0.0"
 COVERAGE_CORE = "sysmon"
 JUPYTER_PLATFORM_DIRS = "1"
+JUST_VERSION = '1.39.0'
+PYAPP_VERSION = "0.26.0"
 PYDEVD_DISABLE_FILE_VALIDATION = "1"
+PYRIGHT_PYTHON_PYLANCE_VERSION = "2025.2.1"
+PYTHON_VERSION = "3.12"
 PYTHONIOENCODING = "utf-8:strict"
 PYTHONUTF8 = "1"
 PYTHONWARNDEFAULTENCODING = "1"
 PYTHONWARNINGS = "ignore"
 UV_PREVIEW = "1"
+UV_VERSION = "0.5.29"
 
 [tool.coverage.report]
 exclude_also = ['if __name__ == "__main__":']

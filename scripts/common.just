@@ -34,7 +34,7 @@ false :=\
 
 #* Just
 _just :=\
-  'uvx --from' + sp + quote('rust-just@' + trim(read('.just-version'))) + sp + 'just'
+  'uvx --from' + sp + quote(env('UVX_JUST')) + sp + 'just'
 _just_quiet :=\
   _just + sp + '--quiet'
 _just_no_explain :=\

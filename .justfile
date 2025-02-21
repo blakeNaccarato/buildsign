@@ -38,17 +38,17 @@ alias r := run
 #* 🟣 uv
 
 #? Uv invocations
+python_version :=\
+  env('PYTHON_VERSION', '3.12')
 _uv_options :=\
-  '--all-packages'
+  '--all-packages' \
+  + sp + '--python' + sp + quote(python_version)
 _uv :=\
   'uv'
 _uvr :=\
   _uv + sp + 'run' + sp + _uv_options
 _uvs :=\
   _uv + sp + 'sync' + sp + _uv_options
-_uve :=\
-  _uv + sp + 'export' + sp + _uv_options
-
 # 🟣 uv
 [group('🟣 uv')]
 uv *args:
@@ -63,16 +63,12 @@ alias uvr := uv-run
 # 🌐 Synchronize installed uv version with project uv version.
 [group('🟣 uv')]
 uv-update:
-  uv self update {{quote(trim(read('.uv-version')))}}
+  uv self update {{env('UV_VERSION')}}
 
 # ♻️ uv sync ...
 [group('🟣 uv')]
 uv-sync *args:
-  {{_uv_sync}} {{args}}
-_uv_sync :=\
-  pre + sp + _uvs + sp + '--python' + sp + quote(python_version)
-python_version :=\
-  trim(read('.python-version'))
+  {{pre}} {{_uvs}} {{args}}
 alias uvs := uv-sync
 
 #* 🐍 Python
@@ -136,23 +132,28 @@ tool-pyright:
   {{pre}} {{_uvr}} pyright
 alias pyright := tool-pyright
 
-# ✔️  ruff
+# ✔️  ruff check <args> '.'
 [group('⚙️  Tools')]
-tool-ruff:
-  {{pre}} {{_uvr}} ruff check .
+tool-ruff *args:
+  {{pre}} {{_uvr}} ruff check {{args}} .
 alias ruff := tool-ruff
 
 # 🧪 pytest
 [group('⚙️  Tools')]
-tool-pytest:
-  {{pre}} {{_uvr}} pytest
+tool-pytest *args:
+  {{pre}} {{_uvr}} pytest {{args}}
 alias pytest := tool-pytest
 
 # 📖 docs
 [group('⚙️  Tools')]
-tool-docs:
+tool-docs-preview:
   {{pre}} {{_uvr}} sphinx-autobuild --show-traceback docs _site \
     {{ prepend( '--ignore', "'**/temp' '**/data' '**/apidocs' '**/*schema.json'" ) }}
+
+# 📖 docs
+[group('⚙️  Tools')]
+tool-docs-build:
+  {{pre}} {{_uvr}} -EaT 'docs' '_site'
 
 #* 📦 Packaging
 
@@ -170,15 +171,23 @@ alias release := pkg-release
 
 #* 👥 Contributor environment setup
 
+_contrib_dev :=\
+  if path_exists('.venv')==true { _uvr + sp + _dev } \
+  else { 'uvx --with-editable' + sp + quote('./packages/_dev') + sp + _dev }
+_dev :=\
+  'buildsign-dev'
+
 # 👥 Set up contributor environment.
 [group('👥 Contributor environment setup')]
 contrib-setup: \
-  uv-update \
   contrib-sync-environment-variables \
-  contrib-git-submodules \
-  contrib-norm-line-endings \
   contrib-pre-commit-hooks
-    {{pre}} {{_just}} uv-sync
+    {{pre}} {{_just}} uv-update
+    {{pre}} {{_just}} \
+      contrib-git-submodules \
+      contrib-norm-line-endings \
+      contrib-pre-commit-hooks \
+      uv-sync
 
 # 👥 Update Git submodules.
 [group('👥 Contributor environment setup')]
@@ -211,7 +220,7 @@ hooks :=\
 # 👥 Run dev task.
 [group('👥 Contributor environment setup')]
 contrib-dev *args:
-  {{pre}} uvx --from './packages/_dev' buildsign-dev {{args}}
+  {{pre}} _contrib_dev {{args}}
 alias dev := contrib-dev
 
 # 👥 Sync environment variables.
@@ -221,7 +230,7 @@ alias dev := contrib-dev
   #? Sync `.env` and set environment variables from `pyproject.toml`
   $EnvFile = '.env'
   if (!(Test-Path $EnvFile)) { New-Item $EnvFile }
-  $EnvVars = {{_just}} dev sync-environment-variables
+  $EnvVars = {{_contrib_dev}} sync-environment-variables
   $EnvVars | Set-Content ($Env:GITHUB_ENV ? $Env:GITHUB_ENV : $EnvFile)
   $EnvVars | Select-String -Pattern '^(.+?)=(.+)$' | ForEach-Object {
     $K, $V = $_.Matches.Groups[1].Value, $_.Matches.Groups[2].Value
@@ -229,7 +238,7 @@ alias dev := contrib-dev
   }
   #? Sync `.vscode/settings.json` with environment variables
   $ProjEnvJson = '{'
-  ({{_just}} dev sync-environment-variables --config-only) |
+  ({{_contrib_dev}} sync-environment-variables --config-only) |
     Select-String -Pattern '^(.+?)=(.+)$' |
     ForEach-Object {
       $K, $V = $_.Matches.Groups[1].Value, $_.Matches.Groups[2].Value
@@ -273,9 +282,11 @@ mach-gh:
 
 # 🤖 Set up CI.
 [group('💻 Machine setup')]
-mach-ci:
+mach-ci: contrib-sync-environment-variables
+  {{pre}} {{_just}} uv-sync
   {{pre}} Add-Content $Env:GITHUB_PATH ("$PWD/.venv/bin", "$PWD/.venv/scripts")
-  {{_just}} dev elevate-pyright-warnings
+  {{_contrib_dev}} elevate-pyright-warnings
+alias ci := mach-ci
 
 # 📦 Set up devcontainer.
 [script, group('💻 Machine setup')]

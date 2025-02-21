@@ -149,7 +149,7 @@ _wt_name :=\
   'Windows Terminal'
 # ❌ Install Windows Terminal.
 [linux, macos, group('❌ N/A for this OS')]
-brew:
+wt:
   @{{quote(GREEN+_wt_name+sp+_na+NORMAL)}}
 
 # 🌐 Run `.venv/[Scripts/bin]/just inst uv` if you've got a `.venv` but no `uv`.

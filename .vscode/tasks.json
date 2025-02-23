@@ -57,7 +57,7 @@
       "label": "Contributor environment setup",
       "detail": "Set up the contributor environment",
       "icon": { "color": "terminal.ansiYellow", "id": "star-full" },
-      "command": "./j.ps1 contrib-setup",
+      "command": "./j.ps1 con",
       "runOptions": { "runOn": "folderOpen" }
     },
     {

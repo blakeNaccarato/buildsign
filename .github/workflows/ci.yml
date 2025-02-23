@@ -23,7 +23,7 @@ jobs:
           submodules: True
       - id: "uv-version"
         run: |
-          scripts/pre.ps1; Write-Output "uv-version=$((Get-Content 'env.json' | ConvertFrom-Json).UV_VERSION)" >> $Env:GITHUB_OUTPUT
+          scripts/pre.ps1; "uv-version=$((Get-Content 'env.json' | ConvertFrom-Json).UV_VERSION)" | Set-Content $Env:GITHUB_OUTPUT
   world:
     needs: "uv-version"
     runs-on: "ubuntu-22.04"

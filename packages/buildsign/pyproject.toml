@@ -1,6 +1,6 @@
 [build-system]
-requires = ["uv==0.5.29"]
-build-backend = "uv"
+requires = ["uv-build==0.6.16"]
+build-backend = "uv_build"
 
 [project]
 name = "buildsign"

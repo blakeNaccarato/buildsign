@@ -4,6 +4,41 @@ $PSNativeCommandUseErrorActionPreference = $True
 $ErrorView = 'NormalView'
 $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
+function Sync-Uv {
+    <#.SYNOPSIS
+    Sync uv version.#>
+    if (Get-Command './uv' -ErrorAction 'Ignore') {
+        (./uv --version) -Match "uv ([\d.]+)" | Out-Null
+        if ($Matches[1] -ne $Env:UV_VERSION) { ./uv self update $Env:UV_VERSION }
+    }
+    elseif (Get-Command 'uvx' -ErrorAction 'Ignore') { uvx --from "rust-just@$Env:JUST_VERSION" just inst uv }
+    elseif ($IsWindows) { powershell -ExecutionPolicy 'ByPass' -Command "Invoke-RestMethod https://astral.sh/uv/$Env:UV_VERSION/install.ps1 | Invoke-Expression" }
+    else { curl -LsSf "https://astral.sh/uv/$Env:UV_VERSION/install.sh" | sh }
+}
+
+function Sync-DevEnv {
+    <#.SYNOPSIS
+    Write environment variables to the development environment used e.g. in `j.ps1`.#>
+    $EnvVars = Get-Content 'env.json' | ConvertFrom-Json
+    @{
+        JUST_COLOR     = $Env:CI ? 'always' : $null
+        JUST_NO_DOTENV = $Env:CI ? 'true' : $null
+        JUST_TIMESTAMP = $Env:CI ? 'true' : $null
+    }.GetEnumerator() | ForEach-Object {
+        $K, $V = $_.Key, $_.Value
+        if ($V) { $EnvVars | Add-Member -NotePropertyName $K -NotePropertyValue $V }
+    }
+    $Env:DEV_ENV = ''
+    $EnvVars.PsObject.Properties | Sort-Object Name | ForEach-Object {
+        $N, $V = $_.Name, $_.Value
+        if ($V) {
+            Set-Item "Env:$N" $V
+            $Env:DEV_ENV += "$N=$V;"
+        }
+    }
+    $Env:DEV_ENV = $Env:DEV_ENV.TrimEnd(';')
+}
+
 function Sync-ContribEnv {
     <#.SYNOPSIS
     Write environment variables to VSCode contributor environment.#>

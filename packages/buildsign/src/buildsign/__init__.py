@@ -27,7 +27,6 @@ def get_pyapp():
 
 
 def build(package: str, path: Path | None = None, out_dir: Path | None = None):
-    environ["UV_PREVIEW"] = "1"
     with chdir(path) if path else nullcontext():
         run(
             args=[

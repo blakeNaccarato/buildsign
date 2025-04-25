@@ -24,7 +24,7 @@ class Constants:
     buildsign_version: str = field(default=version(NAME))
     pyapp_version: str = "0.26.0"
     python_version: str = "3.12"
-    uv_version: str = "0.5.29"
+    uv_version: str = "0.6.16"
 
     files: Path = Path(resources.files(buildsign))  # pyright: ignore[reportArgumentType]
     default_icon: Path = files / "default.ico"
@@ -52,7 +52,7 @@ class Versions:
     buildsign: str = field(default=version(NAME))
     pyapp: str = "0.26.0"
     python: str = "3.12"
-    uv: str = "0.5.29"
+    uv: str = "0.6.16"
 
 
 @dataclass

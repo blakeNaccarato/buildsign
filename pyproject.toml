@@ -17,6 +17,8 @@ dev = [
   "sourcery>=1.32.0",
 ]
 
+[tool.uv]
+required-version = "==0.6.16"
 [tool.uv.sources]
 buildsign-dev = { workspace = true }
 buildsign = { workspace = true }
@@ -168,7 +170,7 @@ ignore = [
   "COM",     # Allow magic commas and magic missing commas
   "CPY001",  # Don't check for copyright
   "D10",     # Allow missing docstrings
-  "DOC",     # Don't require documented returns, yields, exceptions, etc.
+  "DOC",     # Don't require documented returns, yields, exceptions, etc. # TODO: Remove
   "DTZ",     # Timezones are important, but only contextually necessary.
   "E501",    # Don't check line length. Black handles this.
   "EM",      # Don't check for exception message issues

@@ -28,7 +28,7 @@ jobs:
         with:
           version: "${{ needs.env.outputs.uv_version }}"
           enable-cache: true
-      - run: "uv build --package buildsign"
+      - run: "uv build"
       - run: "rm dist/.gitignore"
       - uses: actions/attest-build-provenance@5e9cb68e95676991667494a6a4e59b8a2f13e1d0 # v1.3.3
         with:

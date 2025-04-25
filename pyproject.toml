@@ -1,8 +1,27 @@
+[build-system]
+requires = ["uv-build==0.6.16"]
+build-backend = "uv_build"
+
 [project]
-name = "buildsign-root"
+name = "buildsign"
 version = "0.0.0"
+authors = [{ name = "Blake Naccarato", email = "blake.naccarato@gmail.com" }]
+description = "Build and sign Python binaries"
+readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.12"
-dependencies = ["cappa>=0.26.4"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = ["cappa>=0.26.4", "httpx>=0.28.1", "platformdirs>=4.3.6"]
+[project.scripts]
+"buildsign" = "buildsign.__main__:main"
+[project.urls]
+Changes = "https://blakeNaccarato.github.io/buildsign/changelog.html"
+Docs = "https://blakeNaccarato.github.io/buildsign"
+Home = "https://github.com/blakeNaccarato/buildsign"
+Tracker = "https://github.com/blakeNaccarato/buildsign/issues"
 
 [dependency-groups]
 dev = [
@@ -21,7 +40,6 @@ dev = [
 required-version = "==0.6.16"
 [tool.uv.sources]
 buildsign-dev = { workspace = true }
-buildsign = { workspace = true }
 hello = { workspace = true }
 [tool.uv.workspace]
 members = ["packages/*"]
@@ -31,6 +49,11 @@ exclude_also = ['if __name__ == "__main__":']
 [tool.coverage.run]
 branch = true
 source = ["buildsign", "buildsign-dev", "hello", "tests"]
+
+[tool.fawltydeps]
+deps = ["pyproject.toml"]
+code = ["src"]
+exclude = [".*", "pyapp"]
 
 [tool.pytest.ini_options]
 addopts = """

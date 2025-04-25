@@ -82,8 +82,8 @@ jobs:
           enable-cache: true
       - run: |
           ./j.ps1 ci
+          ./j.ps1 fawltydeps
           ./j.ps1 fawltydeps --config-file packages/_dev/pyproject.toml
-          ./j.ps1 fawltydeps --config-file packages/buildsign/pyproject.toml
           ./j.ps1 fawltydeps --config-file packages/hello/pyproject.toml
   pyright:
     needs: "env"

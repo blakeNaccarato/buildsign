@@ -4,14 +4,23 @@ exclude: |
   )$
 ci:
   skip:
+    - "fawltydeps"
     - "fawltydeps-dev"
-    - "fawltydeps-buildsign"
     - "fawltydeps-hello"
     - "pytest"
   autoupdate_schedule: "quarterly"
 repos:
   - repo: "local"
     hooks:
+      - id: "fawltydeps"
+        name: "fawltydeps"
+        pass_filenames: false
+        language: "system"
+        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 fawltydeps'"
+        files: |
+          (?x)^(
+            src/.*
+          )$
       - id: "fawltydeps-dev"
         name: "fawltydeps-dev"
         pass_filenames: false
@@ -20,15 +29,6 @@ repos:
         files: |
           (?x)^(
             packages/_dev/.*
-          )$
-      - id: "fawltydeps-buildsign"
-        name: "fawltydeps-buildsign"
-        pass_filenames: false
-        language: "system"
-        entry: "pwsh -NonInteractive -NoProfile -Command './j.ps1 fawltydeps --config-file packages/buildsign/pyproject.toml'"
-        files: |
-          (?x)^(
-            packages/buildsign/.*
           )$
       - id: "fawltydeps-hello"
         name: "fawltydeps-hello"
